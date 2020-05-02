@@ -27,7 +27,7 @@ class FoodCard extends StatelessWidget {
       onTap: press,
       child: Container(
         margin: EdgeInsets.only(left: 20),
-        height: 400,
+        height: 340,
         width: 270,
         child: Stack(
           children: <Widget>[
@@ -36,7 +36,7 @@ class FoodCard extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: Container(
-                height: 380,
+                height: 320,
                 width: 250,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(34),
@@ -49,8 +49,8 @@ class FoodCard extends StatelessWidget {
               top: 10,
               left: 10,
               child: Container(
-                height: 181,
-                width: 181,
+                height: 110,//181,
+                width: 110,//181,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: kPrimaryColor.withOpacity(.15),
@@ -60,15 +60,10 @@ class FoodCard extends StatelessWidget {
             // Food Image
             Positioned(
               top: 0,
-              left: -50,
+              left: -30,
               child: Container(
-                height: 184,
-                width: 276,
-                // decoration: BoxDecoration(
-                //   image: DecorationImage(
-                //     image: AssetImage(image),
-                //   ),
-                // ),
+                height: 112,//184,
+                width: 168,//276,
                 child: Hero(
                   tag: image,
                   child: Image(
@@ -79,8 +74,8 @@ class FoodCard extends StatelessWidget {
             ),
             // Price
             Positioned(
-              right: 20,
-              top: 80,
+              right: 10,
+              top: 100,
               child: Text(
                 "\$${price.toString()}",
                 style: Theme.of(context)
@@ -90,10 +85,10 @@ class FoodCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 201,
-              left: 40,
-              child: Container(
-                width: 210,
+              top: 145,
+              left: 15,
+              child: Container(                
+                width: MediaQuery.of(context).size.width / 3, //width: 160,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -107,7 +102,7 @@ class FoodCard extends StatelessWidget {
                         color: kTextColor.withOpacity(.4),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 12),
                     Text(
                       description,
                       maxLines: 3,
@@ -115,7 +110,7 @@ class FoodCard extends StatelessWidget {
                         color: kTextColor.withOpacity(.65),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 12),
                     Text(
                       calories,
                     )
