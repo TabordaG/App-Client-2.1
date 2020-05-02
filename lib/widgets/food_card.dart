@@ -5,7 +5,7 @@ class FoodCard extends StatelessWidget {
   final String title;
   final String ingredient;
   final String image;
-  final int price;
+  final double price;
   final String calories;
   final String description;
   final Function press;
@@ -64,8 +64,14 @@ class FoodCard extends StatelessWidget {
               child: Container(
                 height: 184,
                 width: 276,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
+                // decoration: BoxDecoration(
+                //   image: DecorationImage(
+                //     image: AssetImage(image),
+                //   ),
+                // ),
+                child: Hero(
+                  tag: image,
+                  child: Image(
                     image: AssetImage(image),
                   ),
                 ),
@@ -76,7 +82,7 @@ class FoodCard extends StatelessWidget {
               right: 20,
               top: 80,
               child: Text(
-                "\$$price",
+                "\$${price.toString()}",
                 style: Theme.of(context)
                     .textTheme
                     .headline
@@ -96,7 +102,7 @@ class FoodCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.title,
                     ),
                     Text(
-                      "With $ingredient",
+                      "With red tomato",
                       style: TextStyle(
                         color: kTextColor.withOpacity(.4),
                       ),

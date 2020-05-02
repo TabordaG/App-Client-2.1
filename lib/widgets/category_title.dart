@@ -13,7 +13,7 @@ class CategoryTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 30),
+      padding: const EdgeInsets.only(left: 20, right: 25),
       child: Text(
         title,
         style: Theme.of(context).textTheme.button.copyWith(

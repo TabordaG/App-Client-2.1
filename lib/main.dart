@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/constants.dart';
 import 'package:food_app/details_screen.dart';
@@ -33,15 +34,15 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: Container(
-        padding: EdgeInsets.all(10),
-        height: 80,
-        width: 80,
+        padding: EdgeInsets.all(5),
+        height: 60,
+        width: 60,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: kPrimaryColor.withOpacity(.26),
         ),
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: kPrimaryColor,
@@ -58,7 +59,7 @@ class HomeScreen extends StatelessWidget {
               alignment: Alignment.topRight,
               child: SvgPicture.asset(
                 "assets/icons/menu.svg",
-                height: 11,
+                height: 8,
               ),
             ),
           ),
@@ -66,18 +67,18 @@ class HomeScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Text(
               "Simple way to find \nTasty food",
-              style: Theme.of(context).textTheme.headline,
+              style: Theme.of(context).textTheme.headline5,
             ),
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: <Widget>[
-                CategoryTitle(title: "All", active: true),
-                CategoryTitle(title: "Italian"),
-                CategoryTitle(title: "Asian"),
-                CategoryTitle(title: "Chinese"),
-                CategoryTitle(title: "Burgers"),
+                CategoryTitle(title: "Todos", active: true),
+                CategoryTitle(title: "Frutas"),
+                CategoryTitle(title: "Verduras"),
+                CategoryTitle(title: "Legumes"),
+                CategoryTitle(title: "Outros"),
               ],
             ),
           ),
@@ -91,43 +92,133 @@ class HomeScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: kBorderColor),
             ),
-            child: SvgPicture.asset("assets/icons/search.svg"),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
             child: Row(
               children: <Widget>[
-                FoodCard(
-                  press: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return DetailsScreen();
-                      }),
-                    );
+                GestureDetector(
+                  child: SvgPicture.asset("assets/icons/search.svg"),
+                  onTap: () {
+                    print('search');
                   },
-                  title: "Vegan salad bowl",
-                  image: "assets/images/image_1.png",
-                  price: 20,
-                  calories: "420Kcal",
-                  description:
-                      "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ",
                 ),
-                FoodCard(
-                  press: () {},
-                  title: "Vegan salad bowl",
-                  image: "assets/images/image_2.png",
-                  price: 20,
-                  calories: "420Kcal",
-                  description:
-                      "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ",
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    // maxLength: 26,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 12.5),
+                      border: InputBorder.none,
+                      hintText: "Procurar",
+                      hintStyle: TextStyle(
+                        color: Color(0xFFA0A5BD),
+                      ),
+                    ),
+                    onSubmitted: (value) {
+                      print(value);
+                    },
+                  ),
                 ),
-                SizedBox(width: 20),
               ],
             ),
           ),
+          Expanded(
+            child: StaggeredGridView.countBuilder(
+              crossAxisCount: 1,
+              itemCount: products.length,
+              itemBuilder: (contex, index) {
+                return FoodCard(
+                  press: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) {
+                        return DetailsScreen(products[index]);
+                      }),
+                    );
+                  },
+                  title: products[index].title,
+                  image: products[index].image,
+                  price: products[index].price,
+                  calories: products[index].calories,
+                  description: products[index].description
+                );
+              },
+              staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+            ),
+          ),
+          //FoodListHorizontal(),
         ],
       ),
     );
   }
 }
+
+// class FoodListHorizontal extends StatelessWidget {
+//   const FoodListHorizontal({
+//     Key key,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return SingleChildScrollView(
+//       scrollDirection: Axis.horizontal,
+//       child: Row(
+//         children: <Widget>[
+//           FoodCard(
+//             press: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(builder: (context) {
+//                   return DetailsScreen();
+//                 }),
+//               );
+//             },
+//             title: "Vegan salad bowl",
+//             image: "assets/images/image_1.png",
+//             price: 20,
+//             calories: "420Kcal",
+//             description:
+//                 "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ",
+//           ),
+//           FoodCard(
+//             press: () {},
+//             title: "Vegan salad bowl",
+//             image: "assets/images/image_2.png",
+//             price: 20,
+//             calories: "420Kcal",
+//             description:
+//                 "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ",
+//           ),
+//           SizedBox(width: 20),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+class Food {
+  final String title;
+  final String image;
+  final double price;
+  final String calories;
+  final String description;
+
+  Food(this.title, this.image, this.price, this.calories, this.description);
+}
+
+List<Food> products = productsData
+    .map((item) => Food(item['title'], item['image'], item['price'], item['calories'], item['description']))
+    .toList();
+
+var productsData = [
+  {
+    "title": "Vegan salad bowl", 'image': "assets/images/image_1.png", 
+    'price': 20.0, "calories": "420Kcal", 
+    "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+  },
+  {
+    "title": "Vegan salad bowl", 'image': "assets/images/image_2.png", 
+    'price': 20.0, "calories": "420Kcal", 
+    "description": "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+    "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+  },
+];
