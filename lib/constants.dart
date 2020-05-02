@@ -8,3 +8,5 @@ const kSecondaryColor = Color(0xFFF5E1CB);
 const kBorderColor = Color(0xFFDDDDDD);
 
 int carrinho = 0;
+double scrollValue;
+TextEditingController search = TextEditingController();

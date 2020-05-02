@@ -5,6 +5,7 @@ import 'package:food_app/constants.dart';
 import 'package:food_app/details_screen.dart';
 import 'package:food_app/widgets/category_title.dart';
 import 'package:food_app/widgets/food_card.dart';
+import 'package:food_app/widgets/soft_buttom.dart';
 import 'package:toast/toast.dart';
 
 void main() => runApp(MyApp());
@@ -20,10 +21,10 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: kWhiteColor,
           primaryColor: kPrimaryColor,
           textTheme: TextTheme(
-            headline: TextStyle(fontWeight: FontWeight.bold),
+            headline5: TextStyle(fontWeight: FontWeight.bold),
             button: TextStyle(fontWeight: FontWeight.bold),
-            title: TextStyle(fontWeight: FontWeight.bold),
-            body1: TextStyle(color: kTextColor),
+            headline6: TextStyle(fontWeight: FontWeight.bold),
+            bodyText2: TextStyle(color: kTextColor),
           )),
       home: HomeScreen(),
     );
@@ -31,14 +32,18 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
+  final double offsetPage;
+
+  HomeScreen({this.offsetPage});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ScrollController _controller;
-  double _height = 270 , _topPadding = -50;
-  TextEditingController _search = TextEditingController();
+  ScrollController controller;
+  double _height = 270, _topPadding = -80, valueScroll = 1;
+  int _isSelected;
+
   List categorias = [
     {'title': 'Todos', 'active': true},
     {'title': 'Frutas', 'active': false},
@@ -46,28 +51,42 @@ class _HomeScreenState extends State<HomeScreen> {
     {'title': 'Legumes', 'active': false},
     {'title': 'Outros', 'active': false}
   ];
-  int _isSelected;
 
   @override
   void initState() {
     super.initState();
-    _controller = ScrollController();
     _isSelected = 0;
-
-    _controller.addListener(() {
-      if (_controller.offset > 27 && _height == 270) {
+    controller = ScrollController();
+    
+    if(widget.offsetPage != null && widget.offsetPage > 27) {
+      setState(() {
+        _height = 1;
+        _topPadding = 20;
+        controller = ScrollController(initialScrollOffset: widget.offsetPage);
+      });
+    }
+    
+    controller.addListener(() {
+      if (controller.offset > 27 && _height == 270) {
         setState(() {
-          _height = 50;
-          _controller.animateTo(1,
+          _height = 1;
+          controller.animateTo(1,
               duration: Duration(milliseconds: 400), curve: Curves.easeOut);
           _topPadding = 20;
         });
-      } else if (_controller.offset == 0 && _height == 50) {
+      } else if (controller.offset == 0 && _height == 1) {
         setState(() {
           _height = 270;
+          _topPadding = -80;
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    // controller.dispose();
   }
 
   @override
@@ -151,8 +170,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             categorias[_isSelected]['active'] = false;
                             categorias[index]['active'] = true;
                             _isSelected = index;
-                            _height = 50;
-                            _controller.animateTo(1,
+                            _height = 1;
+                            controller.animateTo(1,
                                 duration: Duration(milliseconds: 400),
                                 curve: Curves.easeOut);
                             _topPadding = 20;
@@ -176,15 +195,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   border: Border.all(color: kBorderColor),
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     GestureDetector(
                       child: SvgPicture.asset("assets/icons/search.svg"),
                       onTap: () {
-                        print('search');
-                        if (_search.text != null && _search.text.length > 3) {
+                        if (search.text != null && search.text.length > 3) {
                           setState(() {
-                            _height = 50;
-                            _controller.animateTo(1,
+                            _height = 1;
+                            controller.animateTo(1,
                                 duration: Duration(milliseconds: 400),
                                 curve: Curves.easeOut);
                             _topPadding = 20;
@@ -202,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(width: 10),
                     Expanded(
                       child: TextField(
-                        // maxLength: 26,
+                        controller: search,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(bottom: 12.5),
                           border: InputBorder.none,
@@ -211,23 +230,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Color(0xFFA0A5BD),
                           ),
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            _search.text = value;
-                          });
-                        },
                         onSubmitted: (value) {
-                          print(value);
-                          if (_search.text != null && _search.text.length > 3) {
+                          if (search.text != null && search.text.length > 3) {
                             setState(() {
-                              _height = 50;
-                              _controller.animateTo(1,
+                              _height = 1;
+                              controller.animateTo(1,
                                   duration: Duration(milliseconds: 400),
                                   curve: Curves.easeOut);
                               _topPadding = 20;
                             });
                           } else {
-                            print('Vazio');
                             Toast.show(
                               "A busca deve possuir mais do que 3 caractéres",
                               context,
@@ -254,9 +266,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   color: Colors.white,
                   child: Scrollbar(
-                    controller: _controller,
+                    controller: controller,
                     child: StaggeredGridView.countBuilder(
-                      controller: _controller,
+                      controller: controller,
                       crossAxisCount: 2,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
@@ -264,12 +276,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (contex, index) {
                         return FoodCard(
                             press: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) {
+                              setState(() {
+                                scrollValue = controller.offset;
+                              });
+                              Navigator.push(context, PageRouteBuilder(
+                                pageBuilder: (BuildContext context, _, __) {
                                   return DetailsScreen(products[index]);
-                                }),
-                              );
+                                },
+                                transitionDuration: Duration(milliseconds: 800),
+                              ));
                             },
                             title: products[index].title,
                             image: products[index].image,
@@ -284,28 +299,41 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          _height == 50 
-            ? AnimatedContainer(
-              duration: Duration(microseconds: 1500),
-              curve: Curves.ease,
-              // padding: EdgeInsets.only(top: _topPadding, left: MediaQuery.of(context).size.width / 2 - 25,),
-              child: Positioned(
-                top: _topPadding,
-                left: MediaQuery.of(context).size.width / 2 - 25,
-                child: IconButton(
-                  icon: Icon(Icons.keyboard_arrow_down, size: 50,), 
-                  onPressed: () {
-                    setState(() {
-                      _height = 270;
-                      _controller.animateTo(1,
-                          duration: Duration(milliseconds: 400), curve: Curves.easeOut);
-                      _topPadding = -50;
-                    });
-                  }
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 600),
+            curve: Curves.easeOut,
+            top: _topPadding,
+            left: MediaQuery.of(context).size.width / 2 - 40,
+            child: GestureDetector(
+              child: CircularSoftButton(
+                icon: Icon(
+                  Icons.keyboard_arrow_up,
+                  size: 44,
                 ),
               ),
-            )
-            : Container(),
+              onTap: () async {
+                if(controller.offset > 27) {
+                  setState(() {                  
+                    controller.animateTo(1,
+                        duration: Duration(milliseconds: 400), curve: Curves.ease); 
+                  });
+                  await Future.delayed(Duration(milliseconds: 400));
+                  setState(() {
+                    _height = 270;
+                    _topPadding = -80;
+                  });
+                } else {
+                  setState(() {
+                    controller.animateTo(1,
+                        duration: Duration(milliseconds: 400), curve: Curves.ease); 
+                    _height = 270;
+                    _topPadding = -80;
+                  });
+                }
+                
+              }
+            ),
+          ),
         ],
       ),
     );
@@ -358,6 +386,42 @@ var productsData = [
   {
     "title": "Vegan salad bowl",
     'image': "assets/images/image_4.png",
+    'price': 20.0,
+    "calories": "420Kcal",
+    "description":
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+  },
+  {
+    "title": "Vegan salad bowl",
+    'image': "assets/images/image_5.png",
+    'price': 20.0,
+    "calories": "420Kcal",
+    "description":
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+  },
+  {
+    "title": "Vegan salad bowl",
+    'image': "assets/images/image_6.png",
+    'price': 20.0,
+    "calories": "420Kcal",
+    "description":
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+  },
+  {
+    "title": "Vegan salad bowl",
+    'image': "assets/images/image_7.png",
+    'price': 20.0,
+    "calories": "420Kcal",
+    "description":
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+  },
+  {
+    "title": "Vegan salad bowl",
+    'image': "assets/images/image_8.png",
     'price': 20.0,
     "calories": "420Kcal",
     "description":

@@ -77,10 +77,10 @@ class FoodCard extends StatelessWidget {
               right: 10,
               top: 100,
               child: Text(
-                "\$${price.toString()}",
+                "R\$${price.toString()}",
                 style: Theme.of(context)
                     .textTheme
-                    .headline
+                    .headline5
                     .copyWith(color: kPrimaryColor),
               ),
             ),
@@ -94,10 +94,10 @@ class FoodCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.title,
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                     Text(
-                      "With red tomato",
+                      "Gabriel Moreira",
                       style: TextStyle(
                         color: kTextColor.withOpacity(.4),
                       ),
