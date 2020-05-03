@@ -1,5 +1,5 @@
-import 'package:toast/toast.dart';
 import 'dart:convert' show base64, json, utf8;
+import 'package:http/http.dart' as http;
 
 class Basicos  {
   static String  ip = "http://200.129.247.236:8000"; // variavel publica com anderline na frente private
@@ -47,7 +47,7 @@ class Basicos  {
   }
 }
 
-Future<List> buscaProdutos(String categoria, String busca) async {
+Future<List> buscaProdutos(String busca) async {
     //print(widget.id_sessao.toString() + '-');
     // if (widget.id_sessao == 0) {
     //   // verifica se a entrada é anonima sem login
@@ -65,19 +65,16 @@ Future<List> buscaProdutos(String categoria, String busca) async {
     // } else {
       //print(id_empresa);
       //print(Basicos.buscar_produto_home);
-      String link = '';
-      if (widget.id_sessao == 0) {
-        link = Basicos.codifica("${Basicos.ip}/crud/?"
-            "crud=consult-5.${categoria},${id_local_retirada},10,${Basicos.offset},${Basicos.buscar_produto_home}%"); //lista produto pela categoria, empresa e limit e offset
-      } else {
-        link = Basicos.codifica("${Basicos.ip}/crud/?"
-            "crud=consulta5.${categoria},${id_local_retirada},10,${Basicos.offset},${Basicos.buscar_produto_home}%"); //lista produto pela categoria, empresa e limit e offset
-      }
+      String categoria = '*';
+      String idLocalRetirada = '0';
+      String link = Basicos.codifica("${Basicos.ip}/crud/?"
+          "crud=consult-5.$categoria,$idLocalRetirada,10,${Basicos.offset},${Basicos.buscar_produto_home}%"); //lista produto pela categoria, empresa e limit e offset
+     
       var res1 = await http
           .get(Uri.encodeFull(link), headers: {"Accept": "application/json"});
 
       var res = Basicos.decodifica(res1.body);
-      //print(res);
+
       if (res1.body.length > 2) {
         if (res1.statusCode == 200) {
           // converte a lista de consulta em uma lista dinamica

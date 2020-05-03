@@ -428,4 +428,15 @@ var productsData = [
         "Contrary to popular belief, Lorem Ipsum is not simply random text. "
             "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
   },
+  {
+    "title": "Cesta caminhos da agroecologia",
+    'image': "assets/images/image_9.png",
+    'price': 65.0,
+    "calories": "420Kcal",
+    "description":
+        "Caminhos da agroecologia é uma cesta de produtos da agricultura familiar "
+        "e agroecológicos 1 kg de fafirinha de mandioca. 2 kg de mandioca congelada "
+        "2 kg de polpas de frutas 2 coco verdes com agua. OBS. VALE SOMENTE PARA PONTES E LACERDA. "
+        "Em duvida faca contato no watzap: https://chat.whijatsapp.com/DxvxlRnievCBdGLjqVO9EF"
+  },
 ];
