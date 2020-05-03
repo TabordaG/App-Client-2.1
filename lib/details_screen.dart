@@ -56,7 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    SizedBox(width: 1 * (1 - _percentOpacity),), // to move text and show back button
+                    SizedBox(width: 45 * (1 - _percentOpacity),), // to move text and show back button
                     Flexible(
                       child: RichText(
                         text: TextSpan(
@@ -97,25 +97,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
                 collapseMode: CollapseMode.pin,
                 background: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, right: 20, top: 50, bottom: 10),
+                  padding: const EdgeInsets.only(top: 25, bottom: 10),
+                      //left: 20, right: 20, top: 50, bottom: 10),
                   child: Column(
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(bottom: 30),
                         padding: EdgeInsets.only(right: 6, left: 6, bottom: 6),
                         height: 305,
-                        width: 305,
+                        width: MediaQuery.of(context).size.width - 12,//305,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(15),
+                          shape: BoxShape.rectangle,
                           color: kSecondaryColor,
                         ),
                         child: Container(
-                          child: Hero(
-                            tag: widget.product.image,
-                            child: Image(
-                              fit: BoxFit.cover,
-                              image: AssetImage(widget.product.image),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Hero(
+                              tag: widget.product.image,
+                              child: Image(
+                                fit: BoxFit.cover,
+                                image: AssetImage(widget.product.image),
+                              ),
                             ),
                           ),
                         ),

@@ -22,7 +22,7 @@ class CircularSoftButton extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(radius),
               boxShadow: [
-                BoxShadow(color: Colors.black26, offset: Offset(8, 6), blurRadius: 12),
+                BoxShadow(color: Colors.black54, offset: Offset(8, 6), blurRadius: 12),
                 BoxShadow(color: Colors.white, offset: Offset(-8, -6), blurRadius: 12),
               ],
             ),

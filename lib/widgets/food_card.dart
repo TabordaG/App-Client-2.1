@@ -49,8 +49,8 @@ class FoodCard extends StatelessWidget {
               top: 10,
               left: 10,
               child: Container(
-                height: 110,//181,
-                width: 110,//181,
+                height: 130,//181,
+                width: 130,//181,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: kPrimaryColor.withOpacity(.15),
@@ -60,14 +60,16 @@ class FoodCard extends StatelessWidget {
             // Food Image
             Positioned(
               top: 0,
-              left: -30,
+              left: - 10,//-30,
               child: Container(
-                height: 112,//184,
-                width: 168,//276,
-                child: Hero(
-                  tag: image,
-                  child: Image(
-                    image: AssetImage(image),
+                height: 130,//184,
+                width: 130,//168,//276,
+                child: ClipOval(
+                  child: Hero(
+                    tag: image,
+                    child: Image(
+                      image: AssetImage(image),
+                    ),
                   ),
                 ),
               ),
@@ -75,7 +77,7 @@ class FoodCard extends StatelessWidget {
             // Price
             Positioned(
               right: 10,
-              top: 100,
+              top: 105,
               child: Text(
                 "R\$${price.toString()}",
                 style: Theme.of(context)
@@ -95,6 +97,8 @@ class FoodCard extends StatelessWidget {
                     Text(
                       title,
                       style: Theme.of(context).textTheme.headline6,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       "Gabriel Moreira",

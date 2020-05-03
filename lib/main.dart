@@ -439,4 +439,16 @@ var productsData = [
         "2 kg de polpas de frutas 2 coco verdes com agua. OBS. VALE SOMENTE PARA PONTES E LACERDA. "
         "Em duvida faca contato no watzap: https://chat.whijatsapp.com/DxvxlRnievCBdGLjqVO9EF"
   },
+  {
+    "title": "Limão Taiti",
+    'image': "assets/images/limao.png",
+    'price': 8.0,
+    "calories": "420Kcal",
+    "description":
+        "Limao taiti de quintal"
+        "Caminhos da agroecologia é uma cesta de produtos da agricultura familiar "
+        "e agroecológicos 1 kg de fafirinha de mandioca. 2 kg de mandioca congelada "
+        "2 kg de polpas de frutas 2 coco verdes com agua. OBS. VALE SOMENTE PARA PONTES E LACERDA. "
+        "Em duvida faca contato no watzap: https://chat.whijatsapp.com/DxvxlRnievCBdGLjqVO9EF"
+  },
 ];
