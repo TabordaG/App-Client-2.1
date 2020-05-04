@@ -26,7 +26,7 @@ class FoodCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: Container(
-        margin: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.only(left: 10, right: 10),
         height: 340,
         width: 270,
         child: Stack(
@@ -60,7 +60,7 @@ class FoodCard extends StatelessWidget {
             // Food Image
             Positioned(
               top: 0,
-              left: - 10,//-30,
+              left: - 5,//-30,
               child: Container(
                 height: 130,//184,
                 width: 130,//168,//276,
@@ -69,6 +69,7 @@ class FoodCard extends StatelessWidget {
                     tag: image,
                     child: Image(
                       image: AssetImage(image),
+                      fit: BoxFit.fitHeight,
                     ),
                   ),
                 ),

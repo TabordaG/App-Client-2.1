@@ -134,14 +134,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(widget.product.description +
-                        '. ' +
-                        widget.product.description +
-                        '. ' +
-                        widget.product.description +
-                        '. ' +
-                        widget.product.description
-                ),
+                child: Text(widget.product.description),
               ),
               Stack(
                 children: <Widget>[

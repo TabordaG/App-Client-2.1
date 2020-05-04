@@ -41,7 +41,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ScrollController controller;
-  double _height = 270, _topPadding = -80, valueScroll = 1;
+  double _height = 270, _topPadding = -90, valueScroll = 1;
   int _isSelected;
 
   List categorias = [
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
       } else if (controller.offset == 0 && _height == 1) {
         setState(() {
           _height = 270;
-          _topPadding = -80;
+          _topPadding = -90;
         });
       }
     });
@@ -200,6 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     GestureDetector(
                       child: SvgPicture.asset("assets/icons/search.svg"),
                       onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
                         if (search.text != null && search.text.length > 3) {
                           setState(() {
                             _height = 1;
@@ -283,6 +284,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 pageBuilder: (BuildContext context, _, __) {
                                   return DetailsScreen(products[index]);
                                 },
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  var begin = Offset(0.0, 1.0);
+                                  var end = Offset.zero;
+                                  var tween = Tween(begin: begin, end: end);
+                                  var offsetAnimation = animation.drive(tween);
+
+                                  return SlideTransition(
+                                    position: offsetAnimation,
+                                    child: child,
+                                  );
+                                },
                                 transitionDuration: Duration(milliseconds: 800),
                               ));
                             },
@@ -303,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
             duration: Duration(milliseconds: 600),
             curve: Curves.easeOut,
             top: _topPadding,
-            left: MediaQuery.of(context).size.width / 2 - 40,
+            left: MediaQuery.of(context).size.width / 2 - 45,
             child: GestureDetector(
               child: CircularSoftButton(
                 icon: Icon(
@@ -320,14 +332,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   await Future.delayed(Duration(milliseconds: 400));
                   setState(() {
                     _height = 270;
-                    _topPadding = -80;
+                    _topPadding = -90;
                   });
                 } else {
                   setState(() {
                     controller.animateTo(1,
                         duration: Duration(milliseconds: 400), curve: Curves.ease); 
                     _height = 270;
-                    _topPadding = -80;
+                    _topPadding = -90;
                   });
                 }
                 
@@ -357,76 +369,52 @@ List<Food> products = productsData
 
 var productsData = [
   {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_1.png",
-    'price': 20.0,
+    "title": "Mel Saché (900 g)",
+    'image': "assets/images/melsache.png",
+    'price': 45.0,
     "calories": "420Kcal",
     "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+        "Mel produzido pela Associacao de Apicultores de Porto Esperidião. APA"
   },
   {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_2.png",
-    'price': 20.0,
+    "title": "Alface",
+    'image': "assets/images/alface.png",
+    'price': 6.0,
     "calories": "420Kcal",
     "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+        "Produzido sem veneno com praticas agroecológicas"
   },
   {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_3.png",
-    'price': 20.0,
+    "title": "Pimenta Calabresa",
+    'image': "assets/images/pimentacalabresa.png",
+    'price': 10.0,
     "calories": "420Kcal",
     "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+        "Pimenta tipo de cheiro picante para molhos e temperos ou conservas."
   },
   {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_4.png",
-    'price': 20.0,
+    "title": "Cabocla (cerveja artesanal)",
+    'image': "assets/images/cabocla.png",
+    'price': 8.5,
     "calories": "420Kcal",
     "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+        "Cabocla (cerveja artesanal)"
   },
   {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_5.png",
-    'price': 20.0,
+    "title": "Abacaxi",
+    'image': "assets/images/abacaxi.png",
+    'price': 4.0,
     "calories": "420Kcal",
     "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+        "Abacaxi."
   },
   {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_6.png",
-    'price': 20.0,
+    "title": "Limão Rosa",
+    'image': "assets/images/limaorosa.png",
+    'price': 70.2,
     "calories": "420Kcal",
     "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
-  },
-  {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_7.png",
-    'price': 20.0,
-    "calories": "420Kcal",
-    "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
-  },
-  {
-    "title": "Vegan salad bowl",
-    'image': "assets/images/image_8.png",
-    'price': 20.0,
-    "calories": "420Kcal",
-    "description":
-        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+        "Limão Rosa."
   },
   {
     "title": "Cesta caminhos da agroecologia",
@@ -446,9 +434,23 @@ var productsData = [
     "calories": "420Kcal",
     "description":
         "Limao taiti de quintal"
-        "Caminhos da agroecologia é uma cesta de produtos da agricultura familiar "
-        "e agroecológicos 1 kg de fafirinha de mandioca. 2 kg de mandioca congelada "
-        "2 kg de polpas de frutas 2 coco verdes com agua. OBS. VALE SOMENTE PARA PONTES E LACERDA. "
-        "Em duvida faca contato no watzap: https://chat.whijatsapp.com/DxvxlRnievCBdGLjqVO9EF"
+  },
+  {
+    "title": "Vegan salad bowl",
+    'image': "assets/images/image_1.png",
+    'price': 20.0,
+    "calories": "420Kcal",
+    "description":
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+  },
+  {
+    "title": "Vegan salad bowl",
+    'image': "assets/images/image_2.png",
+    'price': 20.0,
+    "calories": "420Kcal",
+    "description":
+        "Contrary to popular belief, Lorem Ipsum is not simply random text. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
   },
 ];
