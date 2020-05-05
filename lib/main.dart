@@ -99,47 +99,57 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Container(
-        height: 70,
-        width: 70,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: kPrimaryColor.withOpacity(.26),
-        ),
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(15),
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: kPrimaryColor,
-              ),
-              child: SvgPicture.asset("assets/icons/bag.svg"),
-            ),
-            Positioned(
-              right: 15,
-              bottom: 10,
-              child: Container(
-                alignment: Alignment.center,
-                height: 21,
-                width: 21,
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Toast.show(
+            "Abrir Carrinho",
+            context,
+            duration: Toast.LENGTH_LONG,
+            gravity: Toast.CENTER,
+          );
+        },
+        child: Container(
+          height: 70,
+          width: 70,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: kPrimaryColor.withOpacity(.26),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(15),
+                height: 60,
+                width: 60,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: kWhiteColor,
+                  color: kPrimaryColor,
                 ),
-                child: Text(
-                  carrinho.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .button
-                      .copyWith(color: kPrimaryColor, fontSize: 16),
-                ),
+                child: SvgPicture.asset("assets/icons/bag.svg"),
               ),
-            )
-          ],
+              Positioned(
+                right: 15,
+                bottom: 10,
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 21,
+                  width: 21,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: kWhiteColor,
+                  ),
+                  child: Text(
+                    carrinho.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .button
+                        .copyWith(color: kPrimaryColor, fontSize: 16),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
       body: Stack(
@@ -370,6 +380,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           height: 50,
                         ),
                         ListTile(
+                          onTap: () {
+                            Toast.show(
+                              "Acessar Minha Conta",
+                              context,
+                              duration: Toast.LENGTH_LONG,
+                              gravity: Toast.CENTER,
+                            );
+                          },
                           title: Text(
                             'Gabriel Moreira',
                             style:
@@ -378,12 +396,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       fontSize: 20,
                                     ),
                           ),
-                          subtitle: Text(
-                            'gabriel98moreira@gmail.com',
-                            style: Theme.of(context).textTheme.button.copyWith(
-                                  color: Colors.white70,
-                                  fontSize: 10
+                          subtitle: RichText(
+                            text: TextSpan(
+                              children: <InlineSpan>[
+                                TextSpan(
+                                  text: 'gabriel98moreira@gmail.com\n',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .button
+                                      .copyWith(
+                                          color: Colors.white70, fontSize: 12),
                                 ),
+                              ],
+                            ),
                           ),
                           leading: CircleAvatar(
                             child: Icon(
@@ -393,6 +418,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             radius: 40,
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            Toast.show(
+                              "No momento só está disponível esta opção.",
+                              context,
+                              duration: Toast.LENGTH_LONG,
+                              gravity: Toast.CENTER,
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'Entrega em Domicílio ',
+                                      style: Theme.of(context).textTheme.button.copyWith(
+                                            color: Colors.white70,
+                                            fontSize: 14
+                                          ),
+                                    ),                                  
+                                  ]
+                                )
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 32),
+                                child: Icon(Icons.arrow_drop_down, size: 24),
+                              ),
+                            ],
+                          ),
+                        ),
                         Divider(
                           height: 50,
                           thickness: 0.5,
@@ -400,36 +458,104 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           indent: 32,
                           endIndent: 32,
                         ),
-                        MenuItem(
-                          icon: Icons.person,
-                          title: "Minha Conta",
-                        ),
-                        MenuItem(
-                          icon: Icons.shopping_basket,
-                          title: "Meus Pedidos",
-                        ),
-                        MenuItem(
-                          icon: Icons.chat,
-                          title: "Chat",
-                        ),
-                        Divider(
-                          height: 50,
-                          thickness: 0.5,
-                          color: Colors.white.withOpacity(.3),
-                          indent: 32,
-                          endIndent: 32,
-                        ),
-                        MenuItem(
-                          icon: Icons.info_outline,
-                          title: "Sobre",
-                        ),
-                        MenuItem(
-                          icon: Icons.help_outline,
-                          title: "Ajuda",
-                        ),
-                        MenuItem(
-                          icon: Icons.exit_to_app,
-                          title: "Sair",
+                        Expanded(
+                          child: ListView(
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            scrollDirection: Axis.vertical,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () {
+                                  Toast.show(
+                                    "Acessar Minha Conta",
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.CENTER,
+                                  );
+                                },
+                                child: MenuItem(
+                                  icon: Icons.person,
+                                  title: "Minha Conta",
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Toast.show(
+                                    "Acessar Meus Pedidos",
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.CENTER,
+                                  );
+                                },
+                                child: MenuItem(
+                                  icon: Icons.shopping_basket,
+                                  title: "Meus Pedidos",
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Toast.show(
+                                    "Acessar Chat",
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.CENTER,
+                                  );
+                                },
+                                child: MenuItem(
+                                  icon: Icons.chat,
+                                  title: "Chat",
+                                ),
+                              ),
+                              Divider(
+                                height: 50,
+                                thickness: 0.5,
+                                color: Colors.white.withOpacity(.3),
+                                indent: 15,
+                                endIndent: 15,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Toast.show(
+                                    "Acessar Sobre",
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.CENTER,
+                                  );
+                                },
+                                child: MenuItem(
+                                  icon: Icons.info_outline,
+                                  title: "Sobre",
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Toast.show(
+                                    "Acessar Ajuda",
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.CENTER,
+                                  );
+                                },
+                                child: MenuItem(
+                                  icon: Icons.help_outline,
+                                  title: "Ajuda",
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Toast.show(
+                                    "Sair",
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.CENTER,
+                                  );
+                                },
+                                child: MenuItem(
+                                  icon: Icons.exit_to_app,
+                                  title: "Sair",
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

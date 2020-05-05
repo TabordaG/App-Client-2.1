@@ -24,7 +24,7 @@ class MenuItem extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.button.copyWith(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.w600
             ),
           ),
