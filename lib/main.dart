@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +5,7 @@ import 'package:food_app/constants.dart';
 import 'package:food_app/details_screen.dart';
 import 'package:food_app/widgets/category_title.dart';
 import 'package:food_app/widgets/food_card.dart';
+import 'package:food_app/widgets/menu_item.dart';
 import 'package:food_app/widgets/soft_buttom.dart';
 import 'package:toast/toast.dart';
 
@@ -65,15 +64,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 400),
       vsync: this,
     );
-    
-    if(widget.offsetPage != null && widget.offsetPage > 27) {
+
+    if (widget.offsetPage != null && widget.offsetPage > 27) {
       setState(() {
         _height = 1;
         _topPadding = 20;
         controller = ScrollController(initialScrollOffset: widget.offsetPage);
       });
     }
-    
+
     controller.addListener(() {
       if (controller.offset > 27 && _height == 270) {
         setState(() {
@@ -148,51 +147,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              AnimatedPadding(
-                duration: Duration(milliseconds: 800),
-                curve: Curves.easeOut,
-                padding: EdgeInsets.only(right: _rightPadding, top: 50),
-                child: GestureDetector(
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: RotationTransition(
-                      turns: Tween(begin: 0.0, end: 0.5).animate(_controller),
-                      child: SvgPicture.asset(
-                        "assets/icons/menu.svg",
-                        height: 12,
-                      ),
-                    ),
-                  ),
-                  onTap: () async {
-                    if(!_isExpanded) {
-                      setState(() {
-                        _rightPadding = MediaQuery.of(context).size.width - 56;                        
-                        _isExpanded = true;
-                      });
-                      Future.delayed(Duration(milliseconds: 200),() async {
-                        await _controller.forward();
-                        Toast.show(
-                          "Abrir Drawer",
-                          context,
-                          duration: Toast.LENGTH_LONG,
-                          gravity: Toast.CENTER,
-                        );
-                      });                      
-                    }
-                    else {
-                      setState(() {
-                        _rightPadding = 20;
-                        _controller.reverse();
-                        _isExpanded = false;
-                      });                      
-                    }
-                  },
-                ),
-              ),
+              //.....
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.only(
+                    left: 20, top: 80, right: 20, bottom: 20),
                 child: Text(
-                  "Do melhor produto para\nsua casa",//"Simple way to find \nTasty food",
+                  "Do Melhor Produto para\na sua Casa", //"Simple way to find \nTasty food",
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
@@ -319,23 +279,28 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               setState(() {
                                 scrollValue = controller.offset;
                               });
-                              Navigator.push(context, PageRouteBuilder(
-                                pageBuilder: (BuildContext context, _, __) {
-                                  return DetailsScreen(products[index]);
-                                },
-                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                  var begin = Offset(0.0, 1.0);
-                                  var end = Offset.zero;
-                                  var tween = Tween(begin: begin, end: end);
-                                  var offsetAnimation = animation.drive(tween);
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (BuildContext context, _, __) {
+                                      return DetailsScreen(products[index]);
+                                    },
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = Offset(0.0, 1.0);
+                                      var end = Offset.zero;
+                                      var tween = Tween(begin: begin, end: end);
+                                      var offsetAnimation =
+                                          animation.drive(tween);
 
-                                  return SlideTransition(
-                                    position: offsetAnimation,
-                                    child: child,
-                                  );
-                                },
-                                transitionDuration: Duration(milliseconds: 450),
-                              ));
+                                      return SlideTransition(
+                                        position: offsetAnimation,
+                                        child: child,
+                                      );
+                                    },
+                                    transitionDuration:
+                                        Duration(milliseconds: 450),
+                                  ));
                             },
                             title: products[index].title,
                             image: products[index].image,
@@ -354,40 +319,211 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             duration: Duration(milliseconds: 600),
             curve: Curves.easeOut,
             top: _topPadding,
-            left: MediaQuery.of(context).size.width / 2 - 45,
+            left: MediaQuery.of(context).size.width / 2 - 47,
             child: GestureDetector(
-              child: CircularSoftButton(
-                icon: Icon(
-                  Icons.keyboard_arrow_up,
-                  size: 44,
+                child: CircularSoftButton(
+                  icon: Icon(
+                    Icons.keyboard_arrow_up,
+                    size: 44,
+                  ),
+                ),
+                onTap: () async {
+                  if (controller.offset > 27) {
+                    setState(() {
+                      controller.animateTo(1,
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.ease);
+                    });
+                    await Future.delayed(Duration(milliseconds: 400));
+                    setState(() {
+                      _height = 270;
+                      _topPadding = -90;
+                    });
+                  } else {
+                    setState(() {
+                      controller.animateTo(1,
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.ease);
+                      _height = 270;
+                      _topPadding = -90;
+                    });
+                  }
+                }),
+          ),
+          AnimatedPositioned(
+            top: 0,
+            bottom: 0,
+            left: _isExpanded ? 0 : -MediaQuery.of(context).size.width - 55,
+            duration: Duration(milliseconds: 800),
+            child: AnimatedOpacity(
+              duration: Duration(milliseconds: 400),
+              opacity: _isExpanded ? 1 : 0,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width - 55,
+                    color: Color(0xFF262AAA),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 50,
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Gabriel Moreira',
+                            style:
+                                Theme.of(context).textTheme.headline5.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
+                          ),
+                          subtitle: Text(
+                            'gabriel98moreira@gmail.com',
+                            style: Theme.of(context).textTheme.button.copyWith(
+                                  color: Colors.white70,
+                                  fontSize: 10
+                                ),
+                          ),
+                          leading: CircleAvatar(
+                            child: Icon(
+                              Icons.perm_identity,
+                              color: Colors.white,
+                            ),
+                            radius: 40,
+                          ),
+                        ),
+                        Divider(
+                          height: 50,
+                          thickness: 0.5,
+                          color: Colors.white.withOpacity(.3),
+                          indent: 32,
+                          endIndent: 32,
+                        ),
+                        MenuItem(
+                          icon: Icons.person,
+                          title: "Minha Conta",
+                        ),
+                        MenuItem(
+                          icon: Icons.shopping_basket,
+                          title: "Meus Pedidos",
+                        ),
+                        MenuItem(
+                          icon: Icons.chat,
+                          title: "Chat",
+                        ),
+                        Divider(
+                          height: 50,
+                          thickness: 0.5,
+                          color: Colors.white.withOpacity(.3),
+                          indent: 32,
+                          endIndent: 32,
+                        ),
+                        MenuItem(
+                          icon: Icons.info_outline,
+                          title: "Sobre",
+                        ),
+                        MenuItem(
+                          icon: Icons.help_outline,
+                          title: "Ajuda",
+                        ),
+                        MenuItem(
+                          icon: Icons.exit_to_app,
+                          title: "Sair",
+                        ),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment(0, -.98),
+                    child: ClipPath(
+                      clipper: CustomMenuClippler(),
+                      child: Container(
+                        height: 110,
+                        width: 45,
+                        color: Color(0xFF262AAA),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 800),
+            curve: Curves.easeOut,
+            right: _rightPadding,
+            top: _topPadding == -90 ? 50 : -20,
+            child: GestureDetector(
+              child: Align(
+                alignment: Alignment.topRight,
+                child: RotationTransition(
+                  turns: Tween(begin: 0.0, end: 0.5).animate(_controller),
+                  child: SvgPicture.asset(
+                    "assets/icons/menu.svg",
+                    height: 12,
+                  ),
                 ),
               ),
               onTap: () async {
-                if(controller.offset > 27) {
-                  setState(() {                  
-                    controller.animateTo(1,
-                        duration: Duration(milliseconds: 400), curve: Curves.ease); 
-                  });
-                  await Future.delayed(Duration(milliseconds: 400));
+                if (!_isExpanded) {
                   setState(() {
-                    _height = 270;
-                    _topPadding = -90;
+                    _rightPadding = MediaQuery.of(context).size.width - 56;
+                  });
+                  Future.delayed(Duration(milliseconds: 200), () {
+                    _controller.forward();
+                  });
+                  Future.delayed(Duration(milliseconds: 800), () {
+                    setState(() {
+                      _isExpanded = true;
+                      _rightPadding = 20;
+                    });
                   });
                 } else {
                   setState(() {
-                    controller.animateTo(1,
-                        duration: Duration(milliseconds: 400), curve: Curves.ease); 
-                    _height = 270;
-                    _topPadding = -90;
+                    _isExpanded = false;
+                    _rightPadding = MediaQuery.of(context).size.width - 56;
+                  });
+                  Future.delayed(Duration(milliseconds: 800), () {
+                    setState(() {
+                      _rightPadding = 20;
+                    });
+                  });
+                  Future.delayed(Duration(milliseconds: 1000), () {
+                    _controller.reverse();
                   });
                 }
-                
-              }
+              },
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+class CustomMenuClippler extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Paint paint = Paint();
+    paint.color = Colors.white;
+
+    final width = size.width;
+    final height = size.height;
+
+    Path path = Path();
+    path.moveTo(0, 0);
+    path.quadraticBezierTo(-8, 8, 10, 16);
+    path.quadraticBezierTo(width - 1, height / 2 - 20, width, height / 2);
+    path.quadraticBezierTo(width + 1, height / 2 + 20, 10, height - 16);
+    path.quadraticBezierTo(-8, height - 8, 0, height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
   }
 }
 
@@ -420,8 +556,7 @@ var productsData = [
     'image': "assets/images/alface.png",
     'price': 6.0,
     "calories": "420Kcal",
-    "description":
-        "Produzido sem veneno com praticas agroecológicas"
+    "description": "Produzido sem veneno com praticas agroecológicas"
   },
   {
     "title": "Pimenta Calabresa",
@@ -436,32 +571,28 @@ var productsData = [
     'image': "assets/images/cabocla.png",
     'price': 8.5,
     "calories": "420Kcal",
-    "description":
-        "Cabocla (cerveja artesanal)"
+    "description": "Cabocla (cerveja artesanal)"
   },
   {
     "title": "Abacaxi",
     'image': "assets/images/abacaxi.png",
     'price': 4.0,
     "calories": "420Kcal",
-    "description":
-        "Abacaxi."
+    "description": "Abacaxi."
   },
   {
     "title": "Limão Rosa",
     'image': "assets/images/limaorosa.png",
     'price': 70.2,
     "calories": "420Kcal",
-    "description":
-        "Limão Rosa."
+    "description": "Limão Rosa."
   },
   {
     "title": "Cesta caminhos da agroecologia",
     'image': "assets/images/image_9.png",
     'price': 65.0,
     "calories": "420Kcal",
-    "description":
-        "Caminhos da agroecologia é uma cesta de produtos da agricultura familiar "
+    "description": "Caminhos da agroecologia é uma cesta de produtos da agricultura familiar "
         "e agroecológicos 1 kg de fafirinha de mandioca. 2 kg de mandioca congelada "
         "2 kg de polpas de frutas 2 coco verdes com agua. OBS. VALE SOMENTE PARA PONTES E LACERDA. "
         "Em duvida faca contato no watzap: https://chat.whijatsapp.com/DxvxlRnievCBdGLjqVO9EF"
@@ -471,8 +602,7 @@ var productsData = [
     'image': "assets/images/limao.png",
     'price': 8.0,
     "calories": "420Kcal",
-    "description":
-        "Limao taiti de quintal"
+    "description": "Limao taiti de quintal"
   },
   {
     "title": "Vegan salad bowl",

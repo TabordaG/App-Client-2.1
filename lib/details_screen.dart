@@ -15,7 +15,6 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   ScrollController _controller;
   double _percentColor, _percentOpacity;
-  Color _color = kSecondaryColor.withOpacity(0);
 
   @override
   void initState() {
@@ -23,12 +22,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     _controller = ScrollController();
     _percentColor = .65;
     _percentOpacity = 1;
-
-    // Future.delayed(Duration(milliseconds: 250), () {
-    //   setState(() {
-    //     _color = kSecondaryColor.withOpacity(1);
-    //   });
-    // });
 
     _controller.addListener(() {
       if (_controller.offset <= 200) {
