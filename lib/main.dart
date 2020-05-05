@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -39,10 +41,12 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   ScrollController controller;
-  double _height = 270, _topPadding = -90, valueScroll = 1;
+  AnimationController _controller;
+  double _height = 270, _topPadding = -90, _rightPadding = 20, valueScroll = 1;
   int _isSelected;
+  bool _isExpanded = false;
 
   List categorias = [
     {'title': 'Todos', 'active': true},
@@ -57,6 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _isSelected = 0;
     controller = ScrollController();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
     
     if(widget.offsetPage != null && widget.offsetPage > 27) {
       setState(() {
@@ -140,20 +148,51 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 20, top: 50),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: SvgPicture.asset(
-                    "assets/icons/menu.svg",
-                    height: 8,
+              AnimatedPadding(
+                duration: Duration(milliseconds: 800),
+                curve: Curves.easeOut,
+                padding: EdgeInsets.only(right: _rightPadding, top: 50),
+                child: GestureDetector(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: RotationTransition(
+                      turns: Tween(begin: 0.0, end: 0.5).animate(_controller),
+                      child: SvgPicture.asset(
+                        "assets/icons/menu.svg",
+                        height: 12,
+                      ),
+                    ),
                   ),
+                  onTap: () async {
+                    if(!_isExpanded) {
+                      setState(() {
+                        _rightPadding = MediaQuery.of(context).size.width - 56;                        
+                        _isExpanded = true;
+                      });
+                      Future.delayed(Duration(milliseconds: 200),() async {
+                        await _controller.forward();
+                        Toast.show(
+                          "Abrir Drawer",
+                          context,
+                          duration: Toast.LENGTH_LONG,
+                          gravity: Toast.CENTER,
+                        );
+                      });                      
+                    }
+                    else {
+                      setState(() {
+                        _rightPadding = 20;
+                        _controller.reverse();
+                        _isExpanded = false;
+                      });                      
+                    }
+                  },
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Text(
-                  "Simple way to find \nTasty food",
+                  "Do melhor produto para\nsua casa",//"Simple way to find \nTasty food",
                   style: Theme.of(context).textTheme.headline5,
                 ),
               ),
@@ -295,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: child,
                                   );
                                 },
-                                transitionDuration: Duration(milliseconds: 800),
+                                transitionDuration: Duration(milliseconds: 450),
                               ));
                             },
                             title: products[index].title,

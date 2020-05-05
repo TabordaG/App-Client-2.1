@@ -15,6 +15,7 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   ScrollController _controller;
   double _percentColor, _percentOpacity;
+  Color _color = kSecondaryColor.withOpacity(0);
 
   @override
   void initState() {
@@ -22,6 +23,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
     _controller = ScrollController();
     _percentColor = .65;
     _percentOpacity = 1;
+
+    // Future.delayed(Duration(milliseconds: 250), () {
+    //   setState(() {
+    //     _color = kSecondaryColor.withOpacity(1);
+    //   });
+    // });
 
     _controller.addListener(() {
       if (_controller.offset <= 200) {
@@ -101,7 +108,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       //left: 20, right: 20, top: 50, bottom: 10),
                   child: Column(
                     children: <Widget>[
-                      Container(
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        curve: Curves.easeInOutBack,
                         margin: EdgeInsets.only(bottom: 30),
                         padding: EdgeInsets.only(right: 6, left: 6, bottom: 6),
                         height: 305,
@@ -302,7 +311,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   pageBuilder: (BuildContext context, _, __) {
                     return HomeScreen(offsetPage: scrollValue,);
                   },
-                  transitionDuration: Duration(milliseconds: 800),
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, -1.0);
+                    var end = Offset.zero;
+                    var tween = Tween(begin: begin, end: end);
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                  transitionDuration: Duration(milliseconds: 600),
                 ));
               }
             ),
