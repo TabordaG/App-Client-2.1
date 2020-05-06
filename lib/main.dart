@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   double _height = 270, _topPadding = -90, _rightPadding = 20, valueScroll = 1;
   int _isSelected;
   bool _isExpanded = false;
+  Color _colorDrawer = Color(0xFF3C41D3); //Color(0xFF262AAA);
 
   List categorias = [
     {'title': 'Todos', 'active': true},
@@ -96,151 +97,126 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     // controller.dispose();
   }
 
+  Future<bool> onWillPop() async {
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          Toast.show(
-            "Abrir Carrinho",
-            context,
-            duration: Toast.LENGTH_LONG,
-            gravity: Toast.CENTER,
-          );
-        },
-        child: Container(
-          height: 70,
-          width: 70,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: kPrimaryColor.withOpacity(.26),
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(15),
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: kPrimaryColor,
-                ),
-                child: SvgPicture.asset("assets/icons/bag.svg"),
-              ),
-              Positioned(
-                right: 15,
-                bottom: 10,
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 21,
-                  width: 21,
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            Toast.show(
+              "Abrir Carrinho",
+              context,
+              duration: Toast.LENGTH_LONG,
+              gravity: Toast.CENTER,
+            );
+          },
+          child: Container(
+            height: 70,
+            width: 70,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: kPrimaryColor.withOpacity(.26),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(15),
+                  height: 60,
+                  width: 60,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: kWhiteColor,
+                    color: kPrimaryColor,
                   ),
-                  child: Text(
-                    carrinho.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .button
-                        .copyWith(color: kPrimaryColor, fontSize: 16),
-                  ),
+                  child: SvgPicture.asset("assets/icons/bag.svg"),
                 ),
-              )
-            ],
+                Positioned(
+                  right: 15,
+                  bottom: 10,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 21,
+                    width: 21,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: kWhiteColor,
+                    ),
+                    child: Text(
+                      carrinho.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          .copyWith(color: kPrimaryColor, fontSize: 16),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      ),
-      body: Stack(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              //.....
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, top: 80, right: 20, bottom: 20),
-                child: Text(
-                  "Do Melhor Produto para\na sua Casa", //"Simple way to find \nTasty food",
-                  style: Theme.of(context).textTheme.headline5,
+        body: Stack(
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                //.....
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, top: 80, right: 20, bottom: 20),
+                  child: Text(
+                    "Do Melhor Produto para\na sua Casa", //"Simple way to find \nTasty food",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 20,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categorias.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            categorias[_isSelected]['active'] = false;
-                            categorias[index]['active'] = true;
-                            _isSelected = index;
-                            _height = 1;
-                            controller.animateTo(1,
-                                duration: Duration(milliseconds: 400),
-                                curve: Curves.easeOut);
-                            _topPadding = 20;
-                          });
-                        },
-                        child: CategoryTitle(
-                          title: categorias[index]['title'],
-                          active: categorias[index]['active'],
-                        ),
-                      );
-                    }),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                height: 50,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: kBorderColor),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      child: SvgPicture.asset("assets/icons/search.svg"),
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        if (search.text != null && search.text.length > 3) {
-                          setState(() {
-                            _height = 1;
-                            controller.animateTo(1,
-                                duration: Duration(milliseconds: 400),
-                                curve: Curves.easeOut);
-                            _topPadding = 20;
-                          });
-                        } else {
-                          Toast.show(
-                            "A busca deve possuir mais do que 3 caractéres",
-                            context,
-                            duration: Toast.LENGTH_LONG,
-                            gravity: Toast.CENTER,
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        controller: search,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(bottom: 12.5),
-                          border: InputBorder.none,
-                          hintText: "Procurar",
-                          hintStyle: TextStyle(
-                            color: Color(0xFFA0A5BD),
+                Container(
+                  width: double.infinity,
+                  height: 20,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: categorias.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              categorias[_isSelected]['active'] = false;
+                              categorias[index]['active'] = true;
+                              _isSelected = index;
+                              _height = 1;
+                              controller.animateTo(1,
+                                  duration: Duration(milliseconds: 400),
+                                  curve: Curves.easeOut);
+                              _topPadding = 20;
+                            });
+                          },
+                          child: CategoryTitle(
+                            title: categorias[index]['title'],
+                            active: categorias[index]['active'],
                           ),
-                        ),
-                        onSubmitted: (value) {
+                        );
+                      }),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  height: 50,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: kBorderColor),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: SvgPicture.asset("assets/icons/search.svg"),
+                        onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           if (search.text != null && search.text.length > 3) {
                             setState(() {
                               _height = 1;
@@ -259,370 +235,408 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           }
                         },
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              AnimatedContainer(
-                duration: Duration(milliseconds: 400),
-                curve: Curves.easeOut,
-                height: _height,
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  child: Scrollbar(
-                    controller: controller,
-                    child: StaggeredGridView.countBuilder(
-                      controller: controller,
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      itemCount: products.length,
-                      itemBuilder: (contex, index) {
-                        return FoodCard(
-                            press: () {
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: search,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(bottom: 12.5),
+                            border: InputBorder.none,
+                            hintText: "Procurar",
+                            hintStyle: TextStyle(
+                              color: Color(0xFFA0A5BD),
+                            ),
+                          ),
+                          onSubmitted: (value) {
+                            if (search.text != null && search.text.length > 3) {
                               setState(() {
-                                scrollValue = controller.offset;
+                                _height = 1;
+                                controller.animateTo(1,
+                                    duration: Duration(milliseconds: 400),
+                                    curve: Curves.easeOut);
+                                _topPadding = 20;
                               });
-                              Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (BuildContext context, _, __) {
-                                      return DetailsScreen(products[index]);
-                                    },
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      var begin = Offset(0.0, 1.0);
-                                      var end = Offset.zero;
-                                      var tween = Tween(begin: begin, end: end);
-                                      var offsetAnimation =
-                                          animation.drive(tween);
+                            } else {
+                              Toast.show(
+                                "A busca deve possuir mais do que 3 caractéres",
+                                context,
+                                duration: Toast.LENGTH_LONG,
+                                gravity: Toast.CENTER,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 400),
+                  curve: Curves.easeOut,
+                  height: _height,
+                ),
+                Expanded(
+                  child: Container(
+                    color: Colors.white,
+                    child: Scrollbar(
+                      controller: controller,
+                      child: StaggeredGridView.countBuilder(
+                        controller: controller,
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        itemCount: products.length,
+                        itemBuilder: (contex, index) {
+                          return FoodCard(
+                              press: () {
+                                setState(() {
+                                  scrollValue = controller.offset;
+                                });
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (BuildContext context, _, __) {
+                                        return DetailsScreen(products[index]);
+                                      },
+                                      transitionsBuilder: (context, animation,
+                                          secondaryAnimation, child) {
+                                        var begin = Offset(0.0, 1.0);
+                                        var end = Offset.zero;
+                                        var tween = Tween(begin: begin, end: end);
+                                        var offsetAnimation =
+                                            animation.drive(tween);
 
-                                      return SlideTransition(
-                                        position: offsetAnimation,
-                                        child: child,
-                                      );
-                                    },
-                                    transitionDuration:
-                                        Duration(milliseconds: 450),
-                                  ));
-                            },
-                            title: products[index].title,
-                            image: products[index].image,
-                            price: products[index].price,
-                            calories: products[index].calories,
-                            description: products[index].description);
-                      },
-                      staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 600),
-            curve: Curves.easeOut,
-            top: _topPadding,
-            left: MediaQuery.of(context).size.width / 2 - 47,
-            child: GestureDetector(
-                child: CircularSoftButton(
-                  icon: Icon(
-                    Icons.keyboard_arrow_up,
-                    size: 44,
-                  ),
-                ),
-                onTap: () async {
-                  if (controller.offset > 27) {
-                    setState(() {
-                      controller.animateTo(1,
-                          duration: Duration(milliseconds: 400),
-                          curve: Curves.ease);
-                    });
-                    await Future.delayed(Duration(milliseconds: 400));
-                    setState(() {
-                      _height = 270;
-                      _topPadding = -90;
-                    });
-                  } else {
-                    setState(() {
-                      controller.animateTo(1,
-                          duration: Duration(milliseconds: 400),
-                          curve: Curves.ease);
-                      _height = 270;
-                      _topPadding = -90;
-                    });
-                  }
-                }),
-          ),
-          AnimatedPositioned(
-            top: 0,
-            bottom: 0,
-            left: _isExpanded ? 0 : -MediaQuery.of(context).size.width - 55,
-            duration: Duration(milliseconds: 800),
-            child: AnimatedOpacity(
-              duration: Duration(milliseconds: 400),
-              opacity: _isExpanded ? 1 : 0,
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width - 55,
-                    color: Color(0xFF262AAA),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 50,
-                        ),
-                        ListTile(
-                          onTap: () {
-                            Toast.show(
-                              "Acessar Minha Conta",
-                              context,
-                              duration: Toast.LENGTH_LONG,
-                              gravity: Toast.CENTER,
-                            );
-                          },
-                          title: Text(
-                            'Gabriel Moreira',
-                            style:
-                                Theme.of(context).textTheme.headline5.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
-                          ),
-                          subtitle: RichText(
-                            text: TextSpan(
-                              children: <InlineSpan>[
-                                TextSpan(
-                                  text: 'gabriel98moreira@gmail.com\n',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .button
-                                      .copyWith(
-                                          color: Colors.white70, fontSize: 12),
-                                ),
-                              ],
-                            ),
-                          ),
-                          leading: CircleAvatar(
-                            child: Icon(
-                              Icons.perm_identity,
-                              color: Colors.white,
-                            ),
-                            radius: 40,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Toast.show(
-                              "No momento só está disponível esta opção.",
-                              context,
-                              duration: Toast.LENGTH_LONG,
-                              gravity: Toast.CENTER,
-                            );
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Entrega em Domicílio ',
-                                      style: Theme.of(context).textTheme.button.copyWith(
-                                            color: Colors.white70,
-                                            fontSize: 14
-                                          ),
-                                    ),                                  
-                                  ]
-                                )
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 32),
-                                child: Icon(Icons.arrow_drop_down, size: 24),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          height: 50,
-                          thickness: 0.5,
-                          color: Colors.white.withOpacity(.3),
-                          indent: 32,
-                          endIndent: 32,
-                        ),
-                        Expanded(
-                          child: ListView(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            scrollDirection: Axis.vertical,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  Toast.show(
-                                    "Acessar Minha Conta",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.CENTER,
-                                  );
-                                },
-                                child: MenuItem(
-                                  icon: Icons.person,
-                                  title: "Minha Conta",
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Toast.show(
-                                    "Acessar Meus Pedidos",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.CENTER,
-                                  );
-                                },
-                                child: MenuItem(
-                                  icon: Icons.shopping_basket,
-                                  title: "Meus Pedidos",
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Toast.show(
-                                    "Acessar Chat",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.CENTER,
-                                  );
-                                },
-                                child: MenuItem(
-                                  icon: Icons.chat,
-                                  title: "Chat",
-                                ),
-                              ),
-                              Divider(
-                                height: 50,
-                                thickness: 0.5,
-                                color: Colors.white.withOpacity(.3),
-                                indent: 15,
-                                endIndent: 15,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Toast.show(
-                                    "Acessar Sobre",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.CENTER,
-                                  );
-                                },
-                                child: MenuItem(
-                                  icon: Icons.info_outline,
-                                  title: "Sobre",
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Toast.show(
-                                    "Acessar Ajuda",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.CENTER,
-                                  );
-                                },
-                                child: MenuItem(
-                                  icon: Icons.help_outline,
-                                  title: "Ajuda",
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Toast.show(
-                                    "Sair",
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.CENTER,
-                                  );
-                                },
-                                child: MenuItem(
-                                  icon: Icons.exit_to_app,
-                                  title: "Sair",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment(0, -.98),
-                    child: ClipPath(
-                      clipper: CustomMenuClippler(),
-                      child: Container(
-                        height: 110,
-                        width: 45,
-                        color: Color(0xFF262AAA),
+                                        return SlideTransition(
+                                          position: offsetAnimation,
+                                          child: child,
+                                        );
+                                      },
+                                      transitionDuration:
+                                          Duration(milliseconds: 450),
+                                    ));
+                              },
+                              title: products[index].title,
+                              image: products[index].image,
+                              price: products[index].price,
+                              calories: products[index].calories,
+                              description: products[index].description);
+                        },
+                        staggeredTileBuilder: (index) => StaggeredTile.fit(1),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 800),
-            curve: Curves.easeOut,
-            right: _rightPadding,
-            top: _topPadding == -90 ? 50 : -20,
-            child: GestureDetector(
-              child: Align(
-                alignment: Alignment.topRight,
-                child: RotationTransition(
-                  turns: Tween(begin: 0.0, end: 0.5).animate(_controller),
-                  child: SvgPicture.asset(
-                    "assets/icons/menu.svg",
-                    height: 12,
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 600),
+              curve: Curves.easeOut,
+              top: _topPadding,
+              left: MediaQuery.of(context).size.width / 2 - 47,
+              child: GestureDetector(
+                  child: CircularSoftButton(
+                    icon: Icon(
+                      Icons.keyboard_arrow_up,
+                      size: 44,
+                    ),
+                  ),
+                  onTap: () async {
+                    if (controller.offset > 27) {
+                      setState(() {
+                        controller.animateTo(1,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.ease);
+                      });
+                      await Future.delayed(Duration(milliseconds: 400));
+                      setState(() {
+                        _height = 270;
+                        _topPadding = -90;
+                      });
+                    } else {
+                      setState(() {
+                        controller.animateTo(1,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.ease);
+                        _height = 270;
+                        _topPadding = -90;
+                      });
+                    }
+                  }),
+            ),
+            AnimatedPositioned(
+              top: 0,
+              bottom: 0,
+              left: _isExpanded ? 0 : -MediaQuery.of(context).size.width - 55,
+              duration: Duration(milliseconds: 800),
+              child: AnimatedOpacity(
+                duration: Duration(milliseconds: 800),
+                curve: Curves.easeInQuint,
+                opacity: _isExpanded ? 1 : 0,
+                child: GestureDetector(
+                  onHorizontalDragStart: (details) {
+                    print("Drag Start");
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width - 55,
+                        color: _colorDrawer, //Color(0xFF262AAA),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 50,
+                            ),
+                            ListTile(
+                              onTap: () {
+                                Toast.show(
+                                  "Acessar Minha Conta",
+                                  context,
+                                  duration: Toast.LENGTH_LONG,
+                                  gravity: Toast.CENTER,
+                                );
+                              },
+                              title: Text(
+                                'Gabriel Moreira',
+                                style:
+                                    Theme.of(context).textTheme.headline5.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                        ),
+                              ),
+                              subtitle: RichText(
+                                text: TextSpan(
+                                  children: <InlineSpan>[
+                                    TextSpan(
+                                      text: 'gabriel98moreira@gmail.com\n',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .button
+                                          .copyWith(
+                                              color: Colors.white70, fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              leading: CircleAvatar(
+                                child: Icon(
+                                  Icons.perm_identity,
+                                  color: Colors.white,
+                                ),
+                                radius: 40,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Toast.show(
+                                  "No momento só está disponível esta opção.",
+                                  context,
+                                  duration: Toast.LENGTH_LONG,
+                                  gravity: Toast.CENTER,
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Entrega em Domicílio ',
+                                          style: Theme.of(context).textTheme.button.copyWith(
+                                                color: Colors.white70,
+                                                fontSize: 14
+                                              ),
+                                        ),                                  
+                                      ]
+                                    )
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 32),
+                                    child: Icon(Icons.arrow_drop_down, size: 34),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              height: 50,
+                              thickness: 0.5,
+                              color: Colors.white.withOpacity(.3),
+                              indent: 32,
+                              endIndent: 32,
+                            ),
+                            Expanded(
+                              child: ListView(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                scrollDirection: Axis.vertical,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () {
+                                      Toast.show(
+                                        "Acessar Minha Conta",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.CENTER,
+                                      );
+                                    },
+                                    child: MenuItem(
+                                      icon: Icons.person,
+                                      title: "Minha Conta",
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Toast.show(
+                                        "Acessar Meus Pedidos",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.CENTER,
+                                      );
+                                    },
+                                    child: MenuItem(
+                                      icon: Icons.shopping_basket,
+                                      title: "Meus Pedidos",
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Toast.show(
+                                        "Acessar Chat",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.CENTER,
+                                      );
+                                    },
+                                    child: MenuItem(
+                                      icon: Icons.chat,
+                                      title: "Chat",
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 50,
+                                    thickness: 0.5,
+                                    color: Colors.white.withOpacity(.3),
+                                    indent: 15,
+                                    endIndent: 15,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Toast.show(
+                                        "Acessar Sobre",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.CENTER,
+                                      );
+                                    },
+                                    child: MenuItem(
+                                      icon: Icons.info_outline,
+                                      title: "Sobre",
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Toast.show(
+                                        "Acessar Ajuda",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.CENTER,
+                                      );
+                                    },
+                                    child: MenuItem(
+                                      icon: Icons.help_outline,
+                                      title: "Ajuda",
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Toast.show(
+                                        "Sair",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.CENTER,
+                                      );
+                                    },
+                                    child: MenuItem(
+                                      icon: Icons.exit_to_app,
+                                      title: "Sair",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment(0, -.99),
+                        child: ClipPath(
+                          clipper: CustomMenuClippler(),
+                          child: Container(
+                            height: 110,
+                            width: 45,
+                            color: _colorDrawer,//Color(0xFF262AAA),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              onTap: () async {
-                if (!_isExpanded) {
-                  setState(() {
-                    _rightPadding = MediaQuery.of(context).size.width - 56;
-                  });
-                  Future.delayed(Duration(milliseconds: 200), () {
-                    _controller.forward();
-                  });
-                  Future.delayed(Duration(milliseconds: 800), () {
-                    setState(() {
-                      _isExpanded = true;
-                      _rightPadding = 20;
-                    });
-                  });
-                } else {
-                  setState(() {
-                    _isExpanded = false;
-                    _rightPadding = MediaQuery.of(context).size.width - 56;
-                  });
-                  Future.delayed(Duration(milliseconds: 800), () {
-                    setState(() {
-                      _rightPadding = 20;
-                    });
-                  });
-                  Future.delayed(Duration(milliseconds: 1000), () {
-                    _controller.reverse();
-                  });
-                }
-              },
             ),
-          ),
-        ],
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 800),
+              curve: Curves.easeOut,
+              right: _rightPadding,
+              top: _topPadding == -90 ? 50 : -20,
+              child: GestureDetector(
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: RotationTransition(
+                    turns: Tween(begin: 0.0, end: 0.5).animate(_controller),
+                    child: SvgPicture.asset(
+                      "assets/icons/menu.svg",
+                      height: 12,
+                    ),
+                  ),
+                ),
+                onTap: () async {
+                  if (!_isExpanded) {
+                    setState(() {
+                      _rightPadding = MediaQuery.of(context).size.width - 56;
+                    });
+                    Future.delayed(Duration(milliseconds: 200), () {
+                      _controller.forward();
+                    });
+                    Future.delayed(Duration(milliseconds: 800), () {
+                      setState(() {
+                        _isExpanded = true;
+                        _rightPadding = 20;
+                      });
+                    });
+                  } else {
+                    setState(() {
+                      _isExpanded = false;
+                      _rightPadding = MediaQuery.of(context).size.width - 56;
+                    });
+                    Future.delayed(Duration(milliseconds: 800), () {
+                      setState(() {
+                        _rightPadding = 20;
+                      });
+                    });
+                    Future.delayed(Duration(milliseconds: 1000), () {
+                      _controller.reverse();
+                    });
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -78,7 +78,7 @@ class FoodCard extends StatelessWidget {
             // Price
             Positioned(
               right: 10,
-              top: 105,
+              top: 110,
               child: Text(
                 "R\$${price.toString()}",
                 style: Theme.of(context)
@@ -88,7 +88,7 @@ class FoodCard extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 145,
+              top: 140,
               left: 15,
               child: Container(                
                 width: MediaQuery.of(context).size.width / 3, //width: 160,
@@ -117,7 +117,7 @@ class FoodCard extends StatelessWidget {
                     ),
                     SizedBox(height: 12),
                     Text(
-                      calories,
+                      "Em Domicílio",
                     )
                   ],
                 ),
