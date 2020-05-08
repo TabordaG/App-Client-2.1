@@ -356,6 +356,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         setState(() {
                           _percentColor = 1;
                           carrinho += 1;
+                          cart.add(widget.product);
                         });
                         Toast.show(
                           "Adicionado ao carrinho",
@@ -373,6 +374,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         setState(() {
                           _percentColor = 1;
                           carrinho += 1;
+                          cart.add(widget.product);
                         });
                         Toast.show(
                           "Adicionado ao carrinho",
@@ -385,8 +387,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             _percentColor = .65;
                           });
                         });
-
-                        // _onTapDelay();
                       },
                     ),
                     GestureDetector(
