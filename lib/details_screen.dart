@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/constants.dart';
@@ -7,8 +8,10 @@ import 'package:toast/toast.dart';
 
 class DetailsScreen extends StatefulWidget {
   final Food product;
+  final VoidCallback openContainer;
+  final OpenContainerBuilder closedBuilder;
 
-  DetailsScreen(this.product);
+  DetailsScreen(this.product, {this.openContainer, this.closedBuilder});
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
 }
@@ -451,6 +454,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     color: Colors.black,
                     size: 28,
                   ),
+                  // onPressed: widget.closedBuilder,
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -474,7 +478,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           },
                           transitionDuration: Duration(milliseconds: 600),
                         ));
-                  }),
+                  }
+                ),
               radius: 22,
             ),
           ),

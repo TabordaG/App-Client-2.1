@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +9,8 @@ import 'package:food_app/widgets/food_card.dart';
 import 'package:food_app/widgets/menu_item.dart';
 import 'package:food_app/widgets/soft_buttom.dart';
 import 'package:toast/toast.dart';
+
+import 'animation_test.dart';
 
 void main() => runApp(MyApp());
 
@@ -292,38 +295,40 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         itemCount: products.length,
                         itemBuilder: (contex, index) {
                           return FoodCard(
-                              press: () {
-                                setState(() {
-                                  scrollValue = controller.offset;
-                                });
-                                Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (BuildContext context, _, __) {
-                                        return DetailsScreen(products[index]);
-                                      },
-                                      transitionsBuilder: (context, animation,
-                                          secondaryAnimation, child) {
-                                        var begin = Offset(0.0, 1.0);
-                                        var end = Offset.zero;
-                                        var tween = Tween(begin: begin, end: end);
-                                        var offsetAnimation =
-                                            animation.drive(tween);
+                            press: () {
+                              setState(() {
+                                scrollValue = controller.offset;
+                              });
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (BuildContext context, _, __) {
+                                    return DetailsScreen(products[index]);
+                                  },
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = Offset(0.0, 1.0);
+                                    var end = Offset.zero;
+                                    var tween = Tween(begin: begin, end: end);
+                                    var offsetAnimation =
+                                        animation.drive(tween);
 
-                                        return SlideTransition(
-                                          position: offsetAnimation,
-                                          child: child,
-                                        );
-                                      },
-                                      transitionDuration:
-                                          Duration(milliseconds: 450),
-                                    ));
-                              },
-                              title: products[index].title,
-                              image: products[index].image,
-                              price: products[index].price,
-                              calories: products[index].calories,
-                              description: products[index].description);
+                                    return SlideTransition(
+                                      position: offsetAnimation,
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration:
+                                      Duration(milliseconds: 450),
+                                )
+                              );
+                            },
+                            title: products[index].title,
+                            image: products[index].image,
+                            price: products[index].price,
+                            calories: products[index].calories,
+                            description: products[index].description
+                          );                         
                         },
                         staggeredTileBuilder: (index) => StaggeredTile.fit(1),
                       ),
@@ -664,6 +669,30 @@ class CustomMenuClippler extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return true;
+  }
+}
+
+class _OpenContainerWrapper extends StatelessWidget {
+  const _OpenContainerWrapper({
+    this.closedBuilder,
+    this.transitionType,
+    this.food
+  });
+
+  final Food food;
+  final OpenContainerBuilder closedBuilder;
+  final ContainerTransitionType transitionType;
+
+  @override
+  Widget build(BuildContext context) {
+    return OpenContainer(
+      transitionType: transitionType,
+      openBuilder: (BuildContext context, VoidCallback _) {
+        return DetailsScreen(food);
+      },
+      tappable: false,
+      closedBuilder: closedBuilder,
+    );
   }
 }
 
