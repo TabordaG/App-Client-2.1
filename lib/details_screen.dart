@@ -6,6 +6,8 @@ import 'package:food_app/main.dart';
 import 'package:food_app/widgets/soft_buttom.dart';
 import 'package:toast/toast.dart';
 
+import 'cart.dart';
+
 class DetailsScreen extends StatefulWidget {
   final Food product;
   final VoidCallback openContainer;
@@ -389,6 +391,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (BuildContext context, _, __) {
+                              return Cart();
+                            },
+                          ),
+                        );
                         Toast.show(
                           "Abrir Carrinho",
                           context,

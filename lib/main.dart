@@ -1,7 +1,7 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_app/cart.dart';
 import 'package:food_app/constants.dart';
 import 'package:food_app/details_screen.dart';
 import 'package:food_app/widgets/category_title.dart';
@@ -9,8 +9,6 @@ import 'package:food_app/widgets/food_card.dart';
 import 'package:food_app/widgets/menu_item.dart';
 import 'package:food_app/widgets/soft_buttom.dart';
 import 'package:toast/toast.dart';
-
-import 'animation_test.dart';
 
 void main() => runApp(MyApp());
 
@@ -111,6 +109,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       child: Scaffold(
         floatingActionButton: GestureDetector(
           onTap: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (BuildContext context, _, __) {
+                  return Cart();
+                },
+              ),
+            );
             Toast.show(
               "Abrir Carrinho",
               context,
@@ -167,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                //.....
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 20, top: 80, right: 20, bottom: 20),
@@ -669,30 +674,6 @@ class CustomMenuClippler extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
     return true;
-  }
-}
-
-class _OpenContainerWrapper extends StatelessWidget {
-  const _OpenContainerWrapper({
-    this.closedBuilder,
-    this.transitionType,
-    this.food
-  });
-
-  final Food food;
-  final OpenContainerBuilder closedBuilder;
-  final ContainerTransitionType transitionType;
-
-  @override
-  Widget build(BuildContext context) {
-    return OpenContainer(
-      transitionType: transitionType,
-      openBuilder: (BuildContext context, VoidCallback _) {
-        return DetailsScreen(food);
-      },
-      tappable: false,
-      closedBuilder: closedBuilder,
-    );
   }
 }
 
