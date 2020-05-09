@@ -331,7 +331,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             title: products[index].title,
                             image: products[index].image,
                             price: products[index].price,
-                            calories: products[index].calories,
+                            produtor: products[index].produtor,
                             description: products[index].description
                           );                         
                         },
@@ -681,15 +681,16 @@ class Food {
   final String title;
   final String image;
   final double price;
-  final String calories;
+  final String produtor;
   final String description;
+  Color color;
 
-  Food(this.title, this.image, this.price, this.calories, this.description);
+  Food(this.title, this.image, this.price, this.produtor, this.description, {this.color});
 }
 
 List<Food> products = productsData
     .map((item) => Food(item['title'], item['image'], item['price'],
-        item['calories'], item['description']))
+        item['produtor'], item['description']))
     .toList();
 
 var productsData = [
@@ -697,7 +698,7 @@ var productsData = [
     "title": "Mel Saché (900 g)",
     'image': "assets/images/melsache.png",
     'price': 45.0,
-    "calories": "420Kcal",
+    "produtor": "Gabriel",
     "description":
         "Mel produzido pela Associacao de Apicultores de Porto Esperidião. APA"
   },
@@ -705,14 +706,14 @@ var productsData = [
     "title": "Alface",
     'image': "assets/images/alface.png",
     'price': 6.0,
-    "calories": "420Kcal",
+    "produtor": "Gabriel",
     "description": "Produzido sem veneno com praticas agroecológicas"
   },
   {
     "title": "Pimenta Calabresa",
     'image': "assets/images/pimentacalabresa.png",
     'price': 10.0,
-    "calories": "420Kcal",
+    "produtor": "Gustavo",
     "description":
         "Pimenta tipo de cheiro picante para molhos e temperos ou conservas."
   },
@@ -720,28 +721,28 @@ var productsData = [
     "title": "Cabocla (cerveja artesanal)",
     'image': "assets/images/cabocla.png",
     'price': 8.5,
-    "calories": "420Kcal",
+    "produtor": "Gustavo",
     "description": "Cabocla (cerveja artesanal)"
   },
   {
     "title": "Abacaxi",
     'image': "assets/images/abacaxi.png",
     'price': 4.0,
-    "calories": "420Kcal",
+    "produtor": "Elmo",
     "description": "Abacaxi."
   },
   {
     "title": "Limão Rosa",
     'image': "assets/images/limaorosa.png",
     'price': 70.2,
-    "calories": "420Kcal",
+    "produtor": "Elmo",
     "description": "Limão Rosa."
   },
   {
     "title": "Cesta caminhos da agroecologia",
     'image': "assets/images/image_9.png",
     'price': 65.0,
-    "calories": "420Kcal",
+    "produtor": "Kevin",
     "description": "Caminhos da agroecologia é uma cesta de produtos da agricultura familiar "
         "e agroecológicos 1 kg de fafirinha de mandioca. 2 kg de mandioca congelada "
         "2 kg de polpas de frutas 2 coco verdes com agua. OBS. VALE SOMENTE PARA PONTES E LACERDA. "
@@ -751,14 +752,14 @@ var productsData = [
     "title": "Limão Taiti",
     'image': "assets/images/limao.png",
     'price': 8.0,
-    "calories": "420Kcal",
+    "produtor": "Kevin",
     "description": "Limao taiti de quintal"
   },
   {
     "title": "Vegan salad bowl",
     'image': "assets/images/image_1.png",
     'price': 20.0,
-    "calories": "420Kcal",
+    "produtor": "Gabriel",
     "description":
         "Contrary to popular belief, Lorem Ipsum is not simply random text. "
             "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
@@ -767,7 +768,7 @@ var productsData = [
     "title": "Vegan salad bowl",
     'image': "assets/images/image_2.png",
     'price': 20.0,
-    "calories": "420Kcal",
+    "produtor": "Elmo",
     "description":
         "Contrary to popular belief, Lorem Ipsum is not simply random text. "
             "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "

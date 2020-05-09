@@ -6,10 +6,10 @@ class FoodCard extends StatelessWidget {
   final String ingredient;
   final String image;
   final double price;
-  final String calories;
+  final String produtor;
   final String description;
   final Function press;
-  final VoidCallback openContainer;
+  final Color color;
 
   const FoodCard({
     Key key,
@@ -17,10 +17,10 @@ class FoodCard extends StatelessWidget {
     this.ingredient,
     this.image,
     this.price,
-    this.calories,
+    this.produtor,
     this.description,
     this.press,
-    this.openContainer
+    this.color
   }) : super(key: key);
 
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/constants.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class CartCard extends StatefulWidget {
@@ -7,10 +6,10 @@ class CartCard extends StatefulWidget {
   final String ingredient;
   final String image;
   final double price;
-  final String calories;
+  final String produtor;
   final String description;
   final Function press;
-  final VoidCallback openContainer;
+  final Color color;
 
   const CartCard({
     Key key,
@@ -18,10 +17,10 @@ class CartCard extends StatefulWidget {
     this.ingredient,
     this.image,
     this.price,
-    this.calories,
+    this.produtor,
     this.description,
     this.press,
-    this.openContainer
+    this.color
   }) : super(key: key);
 
   @override
@@ -29,20 +28,20 @@ class CartCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartCard> {
-  PaletteGenerator paletteGenerator;
-  Color mainColor = Colors.white;
+  // PaletteGenerator paletteGenerator;
+  // Color mainColor = Colors.white;
 
-  Future<void> _updatePaletteGenerator() async {
-    paletteGenerator = await PaletteGenerator.fromImageProvider(AssetImage(widget.image));
-    setState(() {
-      mainColor = paletteGenerator.dominantColor?.color;
-    });
-  }
+  // Future<void> _updatePaletteGenerator() async {
+  //   paletteGenerator = await PaletteGenerator.fromImageProvider(AssetImage(widget.image));
+  //   setState(() {
+  //     mainColor = paletteGenerator.dominantColor?.color;
+  //   });
+  // }
 
   @override
   initState() {
     super.initState();
-    _updatePaletteGenerator();
+    // _updatePaletteGenerator();
   }
 
   @override
@@ -60,7 +59,7 @@ class _CartCardState extends State<CartCard> {
               width: 130,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: mainColor.withOpacity(.4),
+                color: widget.color.withOpacity(.4),
               ),
             ),
           ),
@@ -73,7 +72,7 @@ class _CartCardState extends State<CartCard> {
               width: 100,//181,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: mainColor.withOpacity(.4),
+                color: widget.color.withOpacity(.4),
               ),
             ),
           ),
@@ -101,7 +100,7 @@ class _CartCardState extends State<CartCard> {
               style: Theme.of(context)
                   .textTheme
                   .headline5
-                  .copyWith(color: mainColor, fontSize: 20),
+                  .copyWith(color: widget.color, fontSize: 20),
             ),
           ),
           Positioned(

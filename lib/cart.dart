@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/constants.dart';
 import 'package:food_app/widgets/card_cart.dart';
-import 'package:food_app/widgets/food_card.dart';
 import 'package:food_app/widgets/soft_buttom.dart';
-
+import 'package:palette_generator/palette_generator.dart';
 import 'main.dart';
+
+List<Pedido> pedidos;
 
 class Cart extends StatefulWidget {
   @override
@@ -13,8 +14,14 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   @override
+  void initState() {
+    super.initState();
+    obterPedidos();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(cart.length);
+    
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -55,83 +62,54 @@ class _CartState extends State<Cart> {
                 ),
               ),
               Expanded(                
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Produtor 1", //"Simple way to find \nTasty food",
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      height: 205,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: cart.length,
+                child:
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: pedidos.length,
                         itemBuilder: (context, index) {
-                          print(cart.length);
-                          if(cart == null || cart.isEmpty)  return Center(child: Text('Carrinho Vazio'),);
-                          return CartCard(
-                            press: () {},
-                            title: cart[index].title,
-                            image: cart[index].image,
-                            price: cart[index].price,
-                            calories: cart[index].calories,
-                            description: cart[index].description
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Produtor: ${pedidos[index].produtor}', //"Simple way to find \nTasty food",
+                                      style: Theme.of(context).textTheme.headline6,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                height: 205,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: pedidos[index].produtos.length,
+                                  itemBuilder: (context, index2) {
+                                    if(cart == null || cart.isEmpty)  return Center(child: Text('Carrinho Vazio'),);
+                                    return CartCard(
+                                      press: () {},
+                                      title: pedidos[index].produtos[index2].title,
+                                      image: pedidos[index].produtos[index2].image,
+                                      price: pedidos[index].produtos[index2].price,
+                                      produtor: pedidos[index].produtos[index2].produtor,
+                                      description: pedidos[index].produtos[index2].description,
+                                      color: pedidos[index].produtos[index2].color,
+                                    );
+                                  }
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                            ],
                           );
                         }
                       ),
-                    ),
-
-                    SizedBox(height: 20),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Produtor 2", //"Simple way to find \nTasty food",
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      height: 205,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: cart.length,
-                        itemBuilder: (context, index) {
-                          print(cart.length);
-                          if(cart == null || cart.isEmpty)  return Center(child: Text('Carrinho Vazio'),);
-                          return CartCard(
-                            press: () {},
-                            title: cart[index].title,
-                            image: cart[index].image,
-                            price: cart[index].price,
-                            calories: cart[index].calories,
-                            description: cart[index].description
-                          );
-                        }
-                      ),
-                    ),
-
-                    SizedBox(height: 100),
-                  ],
-                ),
               ),
+              Container(height: 60,),
             ],
           ),
           Column(
@@ -184,22 +162,22 @@ class _CartState extends State<Cart> {
             padding: const EdgeInsets.only(top: 20.0),
             child: CircularSoftButton(
               icon: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 28,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (BuildContext context, _, __) {
-                          return HomeScreen();
-                        },
-                      )
-                    );
-                  }
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                  size: 28,
                 ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (BuildContext context, _, __) {
+                        return HomeScreen();
+                      },
+                    )
+                  );
+                }
+              ),
               radius: 22,
             ),
           ),
@@ -207,4 +185,52 @@ class _CartState extends State<Cart> {
       ),
     );
   }
+
+  Future<List<Pedido>> obterPedidos() async {
+    bool verificado = false;
+    PaletteGenerator paletteGenerator;
+
+    cart.forEach((element) async {
+      paletteGenerator = await PaletteGenerator.fromImageProvider(AssetImage(element.image));
+      setState(() {
+        element.color = paletteGenerator.dominantColor?.color;
+      });
+      verificado = false;
+      for (var pedido in pedidos) {
+        if(pedido.produtor == element.produtor) {
+          setState(() {
+            pedido.produtos.add(element);
+            verificado = true;
+          });          
+          break;
+        }
+      }
+      if(!verificado) {
+        setState(() {
+          pedidos.add(Pedido(
+            produtor: element.produtor,
+            produtos: [element],
+          ));
+        });        
+      }
+    });
+    print(pedidos.length);
+    pedidos.forEach((element) {
+      print(element.produtor);
+      element.produtos.forEach((e) {
+        print(e.title);
+      });
+    });
+    return pedidos;
+  }
+}
+
+class Pedido {
+  final String produtor;
+  final List<Food> produtos;
+
+  Pedido({
+    this.produtos,
+    this.produtor
+  });
 }

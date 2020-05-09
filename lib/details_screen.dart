@@ -361,7 +361,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         Toast.show(
                           "Adicionado ao carrinho",
                           context,
-                          duration: Toast.LENGTH_LONG,
+                          duration: Toast.LENGTH_SHORT,
                           gravity: Toast.CENTER,
                         );
                       },
@@ -379,7 +379,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         Toast.show(
                           "Adicionado ao carrinho",
                           context,
-                          duration: Toast.LENGTH_LONG,
+                          duration: Toast.LENGTH_SHORT,
                           gravity: Toast.CENTER,
                         );
                         Future.delayed(Duration(milliseconds: 200), () {
@@ -402,7 +402,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         Toast.show(
                           "Abrir Carrinho",
                           context,
-                          duration: Toast.LENGTH_LONG,
+                          duration: Toast.LENGTH_SHORT,
                           gravity: Toast.CENTER,
                         );
                       },
