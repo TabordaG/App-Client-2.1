@@ -18,6 +18,7 @@ class _CartState extends State<Cart> {
   StreamController<List<Pedido>> _streamController;
   ScrollController controller;
   List<List<bool>> _isSelected = List<List<bool>>();
+  List<List<bool>> _changeQuantidade = List<List<bool>>();
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _CartState extends State<Cart> {
         list.add(false);
       });
       _isSelected.add(list);
+      _changeQuantidade.add(list);
     });
     print(_isSelected);    
     _streamController.sink.add(pedidos);
@@ -144,15 +146,43 @@ class _CartState extends State<Cart> {
                                           children: <Widget>[
                                             GestureDetector(
                                               onLongPress: () {
+                                                for(var list in _isSelected) {
+                                                  for (int i = 0; i < list.length; i++) {
+                                                    setState(() {
+                                                      list[i] = false;
+                                                    });                                                      
+                                                  }
+                                                }
                                                 setState(() {
-                                                  _isSelected[index][index2] = true;
+                                                  _changeQuantidade[index][index2] = false;
+                                                  _isSelected[index][index2] = true;                                                  
                                                 });
+                                                print("Selected: $_isSelected");
+                                                print("Quantidade: $_changeQuantidade");
                                               },
                                               onTap: () {
-                                                if(_isSelected[index][index2]){
+                                                if(!_isSelected[index][index2]) {
+                                                  for(var list in _isSelected) {
+                                                    for (int i = 0; i < list.length; i++) {
+                                                      setState(() {
+                                                        list[i] = false;
+                                                      });                                                      
+                                                    }
+                                                  }
                                                   setState(() {
-                                                    _isSelected[index][index2] = false;
+                                                    _changeQuantidade[index][index2] = true;
+                                                    _isSelected[index][index2] = true;
                                                   });
+                                                  print(_isSelected);
+                                                } else {
+                                                  for(var list in _isSelected) {
+                                                    for (int i = 0; i < list.length; i++) {
+                                                      setState(() {
+                                                        list[i] = false;
+                                                      });                                                      
+                                                    }
+                                                  }
+                                                  print(_isSelected);
                                                 }
                                               },
                                               child: CartCard(
@@ -167,30 +197,79 @@ class _CartState extends State<Cart> {
                                               ),
                                             ),
                                             _isSelected[index][index2] == true
-                                              ? Container(
-                                                width: 130,
-                                                child: Center(
-                                                  child: IconButton(
-                                                    icon: Icon(Icons.delete_forever, color: Colors.red, size: 32,), 
-                                                    onPressed: () {
-                                                      pedidos[index].produtos.removeAt(index2);
-                                                      pedidos[index].produtos.forEach((element) {print(element.title);});
-                                                      if(pedidos[index].produtos.isEmpty) {
-                                                        pedidos.removeAt(index);
-                                                        _isSelected.removeAt(index);
-                                                      } else _isSelected[index].removeAt(index2);
-                                                      _streamController.sink.add(pedidos);                                                      
-                                                    }
-                                                  ),
-                                                ),
-                                              )
+                                              ? _changeQuantidade[index][index2]
+                                                  ? Container(
+                                                    width: 130,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: <Widget>[
+                                                        IconButton(
+                                                          icon: Icon(
+                                                            Icons.remove_circle,
+                                                            color: Colors.redAccent,
+                                                            size: 28,
+                                                          ), 
+                                                          onPressed: () {
+                                                            if(pedidos[index].produtos[index2].quantidade > 0) {
+                                                              setState(() {
+                                                                pedidos[index].produtos[index2].quantidade -= 1;
+                                                                carrinho -= 1;
+                                                                int indice = cart.indexWhere((element) => element.title == pedidos[index].produtos[index2].title && element.produtor == pedidos[index].produtor);
+                                                                cart[indice].quantidade = pedidos[index].produtos[index2].quantidade;
+                                                              });
+                                                              _streamController.sink.add(pedidos);
+                                                            }                                                            
+                                                          }
+                                                        ),
+                                                        Text(pedidos[index].produtos[index2].quantidade.toString(), style: TextStyle(fontSize: 18),),
+                                                        IconButton(
+                                                          icon: Icon(
+                                                            Icons.add_circle,
+                                                            color: Colors.teal,
+                                                            size: 28,
+                                                          ), 
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              pedidos[index].produtos[index2].quantidade += 1;
+                                                              carrinho += 1;
+                                                              int indice = cart.indexWhere((element) => element.title == pedidos[index].produtos[index2].title && element.produtor == pedidos[index].produtor);
+                                                              cart[indice].quantidade = pedidos[index].produtos[index2].quantidade;
+                                                            });                                                            
+                                                            print(cart.length);
+                                                            _streamController.sink.add(pedidos);
+                                                          }
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                  : Container(
+                                                    width: 130,
+                                                    child: Center(
+                                                      child: IconButton(
+                                                        icon: Icon(Icons.delete_forever, color: Colors.red, size: 32,), 
+                                                        onPressed: () {
+                                                          cart.removeWhere((element) => element.title == pedidos[index].produtos[index2].title && element.produtor == pedidos[index].produtor);
+                                                          carrinho -= pedidos[index].produtos[index2].quantidade.round();
+                                                          pedidos[index].produtos.removeAt(index2);                                                      
+                                                          pedidos[index].produtos.forEach((element) {print(element.title);});
+                                                          if(pedidos[index].produtos.isEmpty) {
+                                                            pedidos.removeAt(index);
+                                                            _isSelected.removeAt(index);
+                                                          } else _isSelected[index].removeAt(index2);
+                                                          _streamController.sink.add(pedidos);
+                                                        }
+                                                      ),
+                                                    ),
+                                                  )
                                               : Container(),
                                           ],
                                         );
                                       }
                                     ),
                                   ),
-                                  SizedBox(height: 20),                                  
+                                  index == cestas.length - 1 
+                                    ? SizedBox(height: 50)
+                                    : SizedBox(height: 20),
                                 ],
                               );
                             }
