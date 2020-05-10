@@ -356,7 +356,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         setState(() {
                           _percentColor = 1;
                           carrinho += 1;
-                          cart.add(widget.product);
+                          if(cart.contains(widget.product)) {
+                            int index = cart.indexWhere((element) => element == widget.product);
+                            cart[index].quantidade +=  1;
+                          } else {
+                            widget.product.quantidade = 1;
+                            cart.add(widget.product);
+                          }
                         });
                         Toast.show(
                           "Adicionado ao carrinho",
@@ -374,7 +380,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         setState(() {
                           _percentColor = 1;
                           carrinho += 1;
-                          cart.add(widget.product);
+                          if(cart.contains(widget.product)) {
+                            int index = cart.indexWhere((element) => element == widget.product);
+                            cart[index].quantidade +=  1;
+                          } else {
+                            widget.product.quantidade = 1;
+                            cart.add(widget.product);
+                          }                          
                         });
                         Toast.show(
                           "Adicionado ao carrinho",

@@ -683,9 +683,10 @@ class Food {
   final double price;
   final String produtor;
   final String description;
+  double quantidade;
   Color color;
 
-  Food(this.title, this.image, this.price, this.produtor, this.description, {this.color});
+  Food(this.title, this.image, this.price, this.produtor, this.description, {this.color, this.quantidade});
 }
 
 List<Food> products = productsData

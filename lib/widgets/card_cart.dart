@@ -8,6 +8,7 @@ class CartCard extends StatefulWidget {
   final double price;
   final String produtor;
   final String description;
+  final double quantidade;
   final Function press;
   final Color color;
 
@@ -20,7 +21,8 @@ class CartCard extends StatefulWidget {
     this.produtor,
     this.description,
     this.press,
-    this.color
+    this.color,
+    this.quantidade,
   }) : super(key: key);
 
   @override
@@ -112,6 +114,24 @@ class _CartCardState extends State<CartCard> {
             left: 15,
             child: Text(
               "Em Domicílio",
+            ),
+          ),
+          Positioned(
+            top: 15,
+            right: 10,
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Text(
+                  '${widget.quantidade.toInt()}',
+                  style: Theme.of(context).textTheme.headline6
+                ),
+              ),
             ),
           ),
         ],

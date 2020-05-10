@@ -15,7 +15,7 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
-  final _streamController = StreamController<List<Pedido>>();
+  StreamController<List<Pedido>> _streamController;
   ScrollController controller;
   List<List<bool>> _isSelected = List<List<bool>>();
 
@@ -26,7 +26,13 @@ class _CartState extends State<Cart> {
     _carregarProdutos();
   }
 
+  void dispose() {
+    super.dispose();
+    _streamController.close();
+  }
+
   _carregarProdutos() async {
+    _streamController = StreamController<List<Pedido>>();
     pedidos = await obterPedidos();
     pedidos.forEach((element) {
       List<bool> list = new List<bool>();
@@ -35,8 +41,8 @@ class _CartState extends State<Cart> {
       });
       _isSelected.add(list);
     });
-    print(_isSelected);
-    _streamController.add(pedidos);
+    print(_isSelected);    
+    _streamController.sink.add(pedidos);
   }
 
   @override
@@ -80,9 +86,16 @@ class _CartState extends State<Cart> {
                 child: StreamBuilder<List<Pedido>>(
                   stream: _streamController.stream,
                   builder: (context, snapshot) {
-                    if(snapshot.hasError || !snapshot.hasData) return Center(child: Text('Carregando..'),);
+                    if(snapshot.hasError || !snapshot.hasData) return Center(child: CircularProgressIndicator(),);
                     List<Pedido> cestas = snapshot.data;
-                    if(cestas.length == 0) return Center(child: Text('Carrinho Vazio'));
+                    if(cestas.length == 0) {
+                      return Center(
+                        child: Text(
+                          'Carrinho Vazio', 
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      );
+                    }
                     switch(snapshot.connectionState) {
                       case ConnectionState.none:
                         return Center(child: Text('Não conectado'));
@@ -119,7 +132,14 @@ class _CartState extends State<Cart> {
                                       shrinkWrap: true,
                                       itemCount: cestas[index].produtos.length,
                                       itemBuilder: (context, index2) {
-                                        if(cart == null || cart.isEmpty)  return Center(child: Text('Carrinho Vazio'),);
+                                        if(cestas == null || cestas.isEmpty) {
+                                          return Center(
+                                            child: Text(
+                                              'Carrinho Vazio', 
+                                              style: Theme.of(context).textTheme.headline6,
+                                            ),
+                                          );
+                                        }
                                         return Column(
                                           children: <Widget>[
                                             GestureDetector(
@@ -127,6 +147,13 @@ class _CartState extends State<Cart> {
                                                 setState(() {
                                                   _isSelected[index][index2] = true;
                                                 });
+                                              },
+                                              onTap: () {
+                                                if(_isSelected[index][index2]){
+                                                  setState(() {
+                                                    _isSelected[index][index2] = false;
+                                                  });
+                                                }
                                               },
                                               child: CartCard(
                                                 press: () {},
@@ -136,6 +163,7 @@ class _CartState extends State<Cart> {
                                                 produtor: cestas[index].produtos[index2].produtor,
                                                 description: cestas[index].produtos[index2].description,
                                                 color: cestas[index].produtos[index2].color,
+                                                quantidade: cestas[index].produtos[index2].quantidade,
                                               ),
                                             ),
                                             _isSelected[index][index2] == true
@@ -145,7 +173,13 @@ class _CartState extends State<Cart> {
                                                   child: IconButton(
                                                     icon: Icon(Icons.delete_forever, color: Colors.red, size: 32,), 
                                                     onPressed: () {
-                                                      print(index2);
+                                                      pedidos[index].produtos.removeAt(index2);
+                                                      pedidos[index].produtos.forEach((element) {print(element.title);});
+                                                      if(pedidos[index].produtos.isEmpty) {
+                                                        pedidos.removeAt(index);
+                                                        _isSelected.removeAt(index);
+                                                      } else _isSelected[index].removeAt(index2);
+                                                      _streamController.sink.add(pedidos);                                                      
                                                     }
                                                   ),
                                                 ),
