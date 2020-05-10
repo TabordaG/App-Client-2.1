@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/constants.dart';
 
 class CartCard extends StatefulWidget {
   final String title;
@@ -27,26 +28,11 @@ class CartCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartCard> {
-  // PaletteGenerator paletteGenerator;
-  // Color mainColor = Colors.white;
-
-  // Future<void> _updatePaletteGenerator() async {
-  //   paletteGenerator = await PaletteGenerator.fromImageProvider(AssetImage(widget.image));
-  //   setState(() {
-  //     mainColor = paletteGenerator.dominantColor?.color;
-  //   });
-  // }
-
-  @override
-  initState() {
-    super.initState();
-    // _updatePaletteGenerator();
-  }
-
   @override
   Widget build(BuildContext context) {    
     return Container(
       margin: EdgeInsets.only(left: 5, right: 5),
+      height: 205,
       width: 130,
       child: Stack(
         children: <Widget>[
@@ -58,7 +44,7 @@ class _CartCardState extends State<CartCard> {
               width: 130,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: widget.color.withOpacity(.4),
+                color: widget.color == null ? kPrimaryColor.withOpacity(.5) : widget.color.withOpacity(.5),
               ),
             ),
           ),
@@ -71,7 +57,7 @@ class _CartCardState extends State<CartCard> {
               width: 100,//181,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: widget.color.withOpacity(.4),
+                color: widget.color == null ? kPrimaryColor.withOpacity(.4) : widget.color.withOpacity(.4),
               ),
             ),
           ),
