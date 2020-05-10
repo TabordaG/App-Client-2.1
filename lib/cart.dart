@@ -28,6 +28,14 @@ class _CartState extends State<Cart> {
 
   _carregarProdutos() async {
     pedidos = await obterPedidos();
+    pedidos.forEach((element) {
+      List<bool> list = new List<bool>();
+      element.produtos.forEach((item) {
+        list.add(false);
+      });
+      _isSelected.add(list);
+    });
+    print(_isSelected);
     _streamController.add(pedidos);
   }
 
@@ -105,7 +113,7 @@ class _CartState extends State<Cart> {
                                   ),
                                   SizedBox(height: 10),
                                   Container(
-                                    height: 205,
+                                    height: _isSelected[index].contains(true) ? 253 : 205,
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
@@ -130,19 +138,19 @@ class _CartState extends State<Cart> {
                                                 color: cestas[index].produtos[index2].color,
                                               ),
                                             ),
-                                            // _isSelected[index][index2] == true
-                                            //   ? Container(
-                                            //     width: 130,
-                                            //     child: Center(
-                                            //       child: IconButton(
-                                            //         icon: Icon(Icons.delete_forever, color: Colors.red,), 
-                                            //         onPressed: () {
-                                            //           print(index2);
-                                            //         }
-                                            //       ),
-                                            //     ),
-                                            //   )
-                                            //   : Container(),
+                                            _isSelected[index][index2] == true
+                                              ? Container(
+                                                width: 130,
+                                                child: Center(
+                                                  child: IconButton(
+                                                    icon: Icon(Icons.delete_forever, color: Colors.red, size: 32,), 
+                                                    onPressed: () {
+                                                      print(index2);
+                                                    }
+                                                  ),
+                                                ),
+                                              )
+                                              : Container(),
                                           ],
                                         );
                                       }
@@ -249,10 +257,6 @@ class _CartState extends State<Cart> {
       for (var pedido in pedidos) {
         if(pedido.produtor == element.produtor) {
           pedido.produtos.add(element);
-          _isSelected[pedidos.length - 1].add(false);
-          // _isSelected.forEach((item) {
-          //   print(item.length);
-          // });
           verificado = true;
           break;
         }
@@ -262,10 +266,6 @@ class _CartState extends State<Cart> {
         produtor: element.produtor,
         produtos: [element],
         ));
-        _isSelected[pedidos.length - 1].add(false);
-        // _isSelected.forEach((item) {
-        //   print(item.length);
-        // });
       }
     });
     
