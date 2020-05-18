@@ -691,7 +691,7 @@ class Food {
 
 List<Food> products = productsData
     .map((item) => Food(item['title'], item['image'], item['price'],
-        item['produtor'], item['description']))
+        item['produtor'], item['description'], quantidade: item['quantidade']))
     .toList();
 
 var productsData = [
@@ -701,7 +701,8 @@ var productsData = [
     'price': 45.0,
     "produtor": "Gabriel",
     "description":
-        "Mel produzido pela Associacao de Apicultores de Porto Esperidião. APA"
+        "Mel produzido pela Associacao de Apicultores de Porto Esperidião. APA",
+    "quantidade": 2.0
   },
   {
     "title": "Alface",
@@ -709,6 +710,8 @@ var productsData = [
     'price': 6.0,
     "produtor": "Gabriel",
     "description": "Produzido sem veneno com praticas agroecológicas"
+    ,
+    "quantidade": 2.0
   },
   {
     "title": "Pimenta Calabresa",
@@ -716,28 +719,32 @@ var productsData = [
     'price': 10.0,
     "produtor": "Gustavo",
     "description":
-        "Pimenta tipo de cheiro picante para molhos e temperos ou conservas."
+        "Pimenta tipo de cheiro picante para molhos e temperos ou conservas.",
+    "quantidade": 2.0
   },
   {
     "title": "Cabocla (cerveja artesanal)",
     'image': "assets/images/cabocla.png",
     'price': 8.5,
     "produtor": "Gustavo",
-    "description": "Cabocla (cerveja artesanal)"
+    "description": "Cabocla (cerveja artesanal)",
+    "quantidade": 2.0
   },
   {
     "title": "Abacaxi",
     'image': "assets/images/abacaxi.png",
     'price': 4.0,
     "produtor": "Elmo",
-    "description": "Abacaxi."
+    "description": "Abacaxi.",
+    "quantidade": 2.0
   },
   {
     "title": "Limão Rosa",
     'image': "assets/images/limaorosa.png",
     'price': 70.2,
     "produtor": "Elmo",
-    "description": "Limão Rosa."
+    "description": "Limão Rosa.",
+    "quantidade": 2.0
   },
   {
     "title": "Cesta caminhos da agroecologia",
@@ -747,14 +754,16 @@ var productsData = [
     "description": "Caminhos da agroecologia é uma cesta de produtos da agricultura familiar "
         "e agroecológicos 1 kg de fafirinha de mandioca. 2 kg de mandioca congelada "
         "2 kg de polpas de frutas 2 coco verdes com agua. OBS. VALE SOMENTE PARA PONTES E LACERDA. "
-        "Em duvida faca contato no watzap: https://chat.whijatsapp.com/DxvxlRnievCBdGLjqVO9EF"
+        "Em duvida faca contato no watzap: https://chat.whijatsapp.com/DxvxlRnievCBdGLjqVO9EF",
+    "quantidade": 2.0
   },
   {
     "title": "Limão Taiti",
     'image': "assets/images/limao.png",
     'price': 8.0,
     "produtor": "Kevin",
-    "description": "Limao taiti de quintal"
+    "description": "Limao taiti de quintal",
+    "quantidade": 2.0
   },
   {
     "title": "Vegan salad bowl",
@@ -763,7 +772,8 @@ var productsData = [
     "produtor": "Gabriel",
     "description":
         "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ",
+    "quantidade": 2.0
   },
   {
     "title": "Vegan salad bowl",
@@ -772,6 +782,7 @@ var productsData = [
     "produtor": "Elmo",
     "description":
         "Contrary to popular belief, Lorem Ipsum is not simply random text. "
-            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. "
+            "It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. ",
+    "quantidade": 2.0
   },
 ];

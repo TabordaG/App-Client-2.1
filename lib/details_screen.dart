@@ -348,13 +348,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            IconButton(
-                              icon: Icon(Icons.add),
-                              alignment: Alignment.center, 
-                              color: kPrimaryColor,
-                              onPressed: () {
-                                _count++;
-                                streamController.sink.add(_count);
+                            GestureDetector(
+                              child: Icon(Icons.add, color: kPrimaryColor,),                               
+                              onTap: () {
+                                if(_count < widget.product.quantidade) {
+                                  _count++;
+                                  streamController.sink.add(_count);
+                                }                                
                               },
                             ),
                             StreamBuilder<Object>(
@@ -364,13 +364,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 return Text(snapshot.data.toString());
                               }
                             ),
-                            IconButton(
-                              icon: Icon(Icons.remove),
-                              alignment: Alignment.center, 
-                              color: kPrimaryColor,
-                              onPressed: () {
-                                _count--;
-                                streamController.sink.add(_count);
+                            GestureDetector(
+                              child: Icon(Icons.remove, color: kPrimaryColor,),                               
+                              onTap: () {
+                                if(_count > 1) {
+                                  _count--;
+                                  streamController.sink.add(_count);
+                                }                                
                               },
                             ),
                           ],
@@ -383,23 +383,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     width: MediaQuery.of(context).size.width * .55,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40)
+                        topLeft: Radius.circular(40),
                       ),
-                      color: kPrimaryColor
+                      color: kPrimaryColor.withOpacity(.9)
                     ),
                     child: FlatButton(
                       onPressed: () {
                         setState(() {
                           _percentColor = 1;
-                          carrinho += 1;
+                          carrinho += _count;
                           if(cart.contains(widget.product)) {
                             int index = cart.indexWhere((element) => element == widget.product);
-                            cart[index].quantidade +=  1;
+                            cart[index].quantidade +=  _count;
                           } else {
-                            widget.product.quantidade = 1;
+                            widget.product.quantidade = _count.toDouble();
                             cart.add(widget.product);
                           }
                         });
+                        Toast.show(
+                          "Adicionado ao carrinho",
+                          context,
+                          duration: Toast.LENGTH_SHORT,
+                          gravity: Toast.CENTER,
+                        );
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
