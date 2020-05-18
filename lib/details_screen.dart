@@ -106,11 +106,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   centerTitle: true,
                   titlePadding: EdgeInsets.symmetric(horizontal: 20),
                   title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      SizedBox(
-                        width: 45 * (1 - _percentOpacity),
-                      ), // to move text and show back button
+                      // SizedBox(
+                      //   width: 45 * (1 - _percentOpacity),
+                      // ), // to move text and show back button
                       Flexible(
                         child: RichText(
                           text: TextSpan(

@@ -386,215 +386,231 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 duration: Duration(milliseconds: 800),
                 curve: Curves.easeInQuint,
                 opacity: _isExpanded ? 1 : 0,
-                child: GestureDetector(
-                  onHorizontalDragStart: (details) {
-                    print("Drag Start");
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width - 55,
-                        color: _colorDrawer, //Color(0xFF262AAA),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              height: 50,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width - 55,
+                      color: _colorDrawer, //Color(0xFF262AAA),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 50,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Toast.show(
+                                "Acessar Minha Conta",
+                                context,
+                                duration: Toast.LENGTH_LONG,
+                                gravity: Toast.CENTER,
+                              );
+                            },
+                            title: Text(
+                              'Gabriel Moreira',
+                              style:
+                                  Theme.of(context).textTheme.headline5.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                      ),
                             ),
-                            ListTile(
-                              onTap: () {
-                                Toast.show(
-                                  "Acessar Minha Conta",
-                                  context,
-                                  duration: Toast.LENGTH_LONG,
-                                  gravity: Toast.CENTER,
-                                );
-                              },
-                              title: Text(
-                                'Gabriel Moreira',
-                                style:
-                                    Theme.of(context).textTheme.headline5.copyWith(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                        ),
-                              ),
-                              subtitle: RichText(
-                                text: TextSpan(
-                                  children: <InlineSpan>[
-                                    TextSpan(
-                                      text: 'gabriel98moreira@gmail.com\n',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .button
-                                          .copyWith(
-                                              color: Colors.white70, fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              leading: CircleAvatar(
-                                child: Icon(
-                                  Icons.perm_identity,
-                                  color: Colors.white,
-                                ),
-                                radius: 40,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Toast.show(
-                                  "No momento só está disponível esta opção.",
-                                  context,
-                                  duration: Toast.LENGTH_LONG,
-                                  gravity: Toast.CENTER,
-                                );
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Entrega em Domicílio ',
-                                          style: Theme.of(context).textTheme.button.copyWith(
-                                                color: Colors.white70,
-                                                fontSize: 14
-                                              ),
-                                        ),                                  
-                                      ]
-                                    )
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 32),
-                                    child: Icon(Icons.arrow_drop_down, size: 34),
+                            subtitle: RichText(
+                              text: TextSpan(
+                                children: <InlineSpan>[
+                                  TextSpan(
+                                    text: 'gabriel98moreira@gmail.com\n',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .button
+                                        .copyWith(
+                                            color: Colors.white70, fontSize: 12),
                                   ),
                                 ],
                               ),
                             ),
-                            Divider(
-                              height: 50,
-                              thickness: 0.5,
-                              color: Colors.white.withOpacity(.3),
-                              indent: 32,
-                              endIndent: 32,
-                            ),
-                            Expanded(
-                              child: ListView(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
-                                scrollDirection: Axis.vertical,
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () {
-                                      Toast.show(
-                                        "Acessar Minha Conta",
-                                        context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.CENTER,
-                                      );
-                                    },
-                                    child: MenuItem(
-                                      icon: Icons.person,
-                                      title: "Minha Conta",
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Toast.show(
-                                        "Acessar Meus Pedidos",
-                                        context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.CENTER,
-                                      );
-                                    },
-                                    child: MenuItem(
-                                      icon: Icons.shopping_basket,
-                                      title: "Meus Pedidos",
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Toast.show(
-                                        "Acessar Chat",
-                                        context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.CENTER,
-                                      );
-                                    },
-                                    child: MenuItem(
-                                      icon: Icons.chat,
-                                      title: "Chat",
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 50,
-                                    thickness: 0.5,
-                                    color: Colors.white.withOpacity(.3),
-                                    indent: 15,
-                                    endIndent: 15,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Toast.show(
-                                        "Acessar Sobre",
-                                        context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.CENTER,
-                                      );
-                                    },
-                                    child: MenuItem(
-                                      icon: Icons.info_outline,
-                                      title: "Sobre",
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Toast.show(
-                                        "Acessar Ajuda",
-                                        context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.CENTER,
-                                      );
-                                    },
-                                    child: MenuItem(
-                                      icon: Icons.help_outline,
-                                      title: "Ajuda",
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Toast.show(
-                                        "Sair",
-                                        context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.CENTER,
-                                      );
-                                    },
-                                    child: MenuItem(
-                                      icon: Icons.exit_to_app,
-                                      title: "Sair",
-                                    ),
-                                  ),
-                                ],
+                            leading: CircleAvatar(
+                              child: Icon(
+                                Icons.perm_identity,
+                                color: Colors.white,
                               ),
+                              radius: 40,
                             ),
-                          ],
-                        ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Toast.show(
+                                "No momento só está disponível esta opção.",
+                                context,
+                                duration: Toast.LENGTH_LONG,
+                                gravity: Toast.CENTER,
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Entrega em Domicílio ',
+                                        style: Theme.of(context).textTheme.button.copyWith(
+                                              color: Colors.white70,
+                                              fontSize: 14
+                                            ),
+                                      ),                                  
+                                    ]
+                                  )
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 32),
+                                  child: Icon(Icons.arrow_drop_down, size: 34),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(
+                            height: 50,
+                            thickness: 0.5,
+                            color: Colors.white.withOpacity(.3),
+                            indent: 32,
+                            endIndent: 32,
+                          ),
+                          Expanded(
+                            child: ListView(
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              scrollDirection: Axis.vertical,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    Toast.show(
+                                      "Acessar Minha Conta",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.CENTER,
+                                    );
+                                  },
+                                  child: MenuItem(
+                                    icon: Icons.person,
+                                    title: "Minha Conta",
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Toast.show(
+                                      "Acessar Meus Pedidos",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.CENTER,
+                                    );
+                                  },
+                                  child: MenuItem(
+                                    icon: Icons.shopping_basket,
+                                    title: "Meus Pedidos",
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Toast.show(
+                                      "Acessar Chat",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.CENTER,
+                                    );
+                                  },
+                                  child: MenuItem(
+                                    icon: Icons.chat,
+                                    title: "Chat",
+                                  ),
+                                ),
+                                Divider(
+                                  height: 50,
+                                  thickness: 0.5,
+                                  color: Colors.white.withOpacity(.3),
+                                  indent: 15,
+                                  endIndent: 15,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Toast.show(
+                                      "Acessar Sobre",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.CENTER,
+                                    );
+                                  },
+                                  child: MenuItem(
+                                    icon: Icons.info_outline,
+                                    title: "Sobre",
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Toast.show(
+                                      "Acessar Ajuda",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.CENTER,
+                                    );
+                                  },
+                                  child: MenuItem(
+                                    icon: Icons.help_outline,
+                                    title: "Ajuda",
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Toast.show(
+                                      "Sair",
+                                      context,
+                                      duration: Toast.LENGTH_LONG,
+                                      gravity: Toast.CENTER,
+                                    );
+                                  },
+                                  child: MenuItem(
+                                    icon: Icons.exit_to_app,
+                                    title: "Sair",
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      Align(
-                        alignment: Alignment(0, -.99),
-                        child: ClipPath(
-                          clipper: CustomMenuClippler(),
-                          child: Container(
-                            height: 110,
-                            width: 45,
-                            color: _colorDrawer,//Color(0xFF262AAA),
+                    ),
+                    GestureDetector(
+                      onPanStart: (details) {
+                        setState(() {
+                          _isExpanded = false;
+                          _rightPadding = MediaQuery.of(context).size.width - 56;
+                        });
+                        Future.delayed(Duration(milliseconds: 800), () {
+                          setState(() {
+                            _rightPadding = 20;
+                          });
+                        });
+                        Future.delayed(Duration(milliseconds: 1000), () {
+                          _controller.reverse();
+                        });
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: 55,
+                        color: Colors.transparent,
+                        child: Align(
+                          alignment: Alignment(0, -.99),
+                          child: ClipPath(
+                            clipper: CustomMenuClippler(),
+                            child: Container(
+                              height: 110,
+                              width: 45,
+                              color: _colorDrawer,//Color(0xFF262AAA),
+                            ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
