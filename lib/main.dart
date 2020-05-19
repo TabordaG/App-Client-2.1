@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/cart.dart';
+import 'package:food_app/cart_screen.dart';
 import 'package:food_app/constants.dart';
 import 'package:food_app/details_screen.dart';
 import 'package:food_app/widgets/category_title.dart';
@@ -113,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               context,
               PageRouteBuilder(
                 pageBuilder: (BuildContext context, _, __) {
-                  return Cart();
+                  return CartScreen();
                 },
               ),
             );

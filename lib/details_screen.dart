@@ -22,7 +22,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   ScrollController _controller;
-  double _percentColor, _percentOpacity;
+  double _percentColor;
   Color _color = Colors.white;
   int _count = 1;
   StreamController<int> streamController = StreamController<int>();
@@ -32,25 +32,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
     super.initState();
     _controller = ScrollController();
     _percentColor = .65;
-    _percentOpacity = 1;
     streamController.sink.add(_count);
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         _color = kSecondaryColor;
       });
-    });
-
-    _controller.addListener(() {
-      if (_controller.offset <= 200) {
-        setState(() {
-          _percentOpacity = 1;
-        });
-      } else if (_controller.offset <= 400) {
-        setState(() {
-          _percentOpacity = 1 - (_controller.offset / 400);
-        });
-      }
     });
   }
 
