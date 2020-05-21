@@ -11,12 +11,23 @@ import 'package:food_app/widgets/menu_item.dart';
 import 'package:food_app/widgets/soft_buttom.dart';
 import 'package:toast/toast.dart';
 
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) {
+        return ScrollConfiguration(behavior: MyBehavior(), child: child);
+      },
       debugShowCheckedModeBanner: false,
       title: 'Food App',
       theme: ThemeData(

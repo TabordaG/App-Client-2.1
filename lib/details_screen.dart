@@ -36,7 +36,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
-        _color = kSecondaryColor;
+        _color = kPrimaryColor.withOpacity(.1);//kSecondaryColor;
       });
     });
   }
@@ -180,28 +180,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           padding: const EdgeInsets.only(top: 25, bottom: 10),
                           child: Column(
                             children: <Widget>[
-                              AnimatedContainer(
-                                duration: Duration(milliseconds: 800),
-                                curve: Curves.easeInOutBack,
-                                margin: EdgeInsets.only(bottom: 30),
-                                padding:
-                                    EdgeInsets.only(right: 6, left: 6, bottom: 6),
-                                height: 305,
-                                width:
-                                    MediaQuery.of(context).size.width - 12, //305,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  shape: BoxShape.rectangle,
-                                  color: _color,
-                                ),
-                                child: Container(
-                                  child: ClipRRect(
+                              Center(
+                                child: AnimatedContainer(
+                                  duration: Duration(milliseconds: 800),
+                                  curve: Curves.easeInOutBack,
+                                  margin: EdgeInsets.only(bottom: 30),
+                                  padding:
+                                      EdgeInsets.only(right: 6, left: 6, bottom: 6),
+                                  height: 305,
+                                  width:
+                                      MediaQuery.of(context).size.width - 12, //305,
+                                  decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
-                                    child: Hero(
-                                      tag: widget.product.image,
-                                      child: Image(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage(widget.product.image),
+                                    shape: BoxShape.rectangle,
+                                    color: _color,
+                                  ),
+                                  child: Container(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Hero(
+                                        tag: widget.product.image,
+                                        child: Image(
+                                          fit: BoxFit.cover,
+                                          image: AssetImage(widget.product.image),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -327,19 +329,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       child: Container(
                         height: 30,
                         width: 115,
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.all(Radius.circular(40))
-                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             GestureDetector(
-                              child: Icon(Icons.add, color: kPrimaryColor,),                               
+                              child: Container(             
+                                padding: EdgeInsets.all(2),                                   
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                                  color: kPrimaryColor.withOpacity(.4),
+                                  shape: BoxShape.rectangle
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.remove, 
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),                               
                               onTap: () {
-                                if(_count < widget.product.quantidade) {
-                                  _count++;
+                                if(_count > 1) {
+                                  _count--;
                                   streamController.sink.add(_count);
                                 }                                
                               },
@@ -352,10 +363,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               }
                             ),
                             GestureDetector(
-                              child: Icon(Icons.remove, color: kPrimaryColor,),                               
+                              child: Container(             
+                                padding: EdgeInsets.all(2),                                   
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                                  color: kPrimaryColor.withOpacity(.4),
+                                  shape: BoxShape.rectangle
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.add, 
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),                               
                               onTap: () {
                                 if(_count > 1) {
-                                  _count--;
+                                  _count++;
                                   streamController.sink.add(_count);
                                 }                                
                               },
