@@ -81,12 +81,6 @@ class _CartScreenState extends State<CartScreen> {
                   builder: (context, snapshot) {
                     if(snapshot.hasError || !snapshot.hasData) return Center(child: CircularProgressIndicator(),);
                     List<Pedido> cestas = snapshot.data;
-                    // total = 0;
-                    // cestas.forEach((element) {
-                    //   element.produtos.forEach((produto) {
-                    //     total = total + produto.price * produto.quantidade;
-                    //   });
-                    // });
                     if(cestas.length == 0) {
                       return Center(
                         child: Text(
@@ -170,7 +164,7 @@ class _CartScreenState extends State<CartScreen> {
                                                           right: 0,
                                                           child: ClipRRect(
                                                             borderRadius: BorderRadius.all(Radius.circular(15)),
-                                                            child: Image( 
+                                                            child: Image(
                                                               height: 90,
                                                               width: 90,                                         
                                                               image: AssetImage(item.produtos[index2].image),
@@ -222,7 +216,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                     setState(() {
                                                                       item.produtos[index2].quantidade--;
                                                                       total -= item.produtos[index2].price;
-                                                                      carrinho -= 1;
+                                                                      carrinho -= 1;  // Esse carrinho, é a variável que tem no arquivo constants.dart, ele serve para mostrar lá no Home quantos itens tem no carrinho.
                                                                     });
                                                                   }                                
                                                                 },
@@ -247,7 +241,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                   setState(() {
                                                                     item.produtos[index2].quantidade++;
                                                                     total = total + item.produtos[index2].price;
-                                                                    carrinho += 1;                                                 
+                                                                    carrinho += 1;  // Esse carrinho, é a variável que tem no arquivo constants.dart, ele serve para mostrar lá no Home quantos itens tem no carrinho.                                           
                                                                   });                          
                                                                 },
                                                               ),
@@ -287,7 +281,7 @@ class _CartScreenState extends State<CartScreen> {
                                             icon: Icons.delete,
                                             onTap: () {
                                               setState(() {
-                                                carrinho -= item.produtos[index2].quantidade.toInt();
+                                                carrinho -= item.produtos[index2].quantidade.toInt();  // Esse carrinho, é a variável que tem no arquivo constants.dart, ele serve para mostrar lá no Home quantos itens tem no carrinho.
                                                 total = total - item.produtos[index2].price * item.produtos[index2].quantidade;
                                                 cart.remove(item.produtos[index2]);
                                                 cestas.remove(item.produtos[index2]);
@@ -433,12 +427,16 @@ Future<List<Pedido>> obterPedidos() async {
   bool verificado = false;
   PaletteGenerator paletteGenerator;
   pedidos = [];
+
+  //  Criar aqui a chamada no banco de dados dos produtos no carrinho
+  //  E salvar todos eles nessa variável chamada cart.
+
   cart.forEach((element) async {
     print(element.title);
     total = total + element.price * element.quantidade;
     if(element.color == null) {
       paletteGenerator = await PaletteGenerator.fromImageProvider(AssetImage(element.image));
-      element.color = paletteGenerator.darkVibrantColor?.color == null ? Colors.grey : paletteGenerator.darkVibrantColor?.color;
+      element.color = paletteGenerator.darkVibrantColor?.color == null ? Colors.grey[100] : paletteGenerator.darkVibrantColor?.color;
     }      
     verificado = false;
     for (var pedido in pedidos) {
